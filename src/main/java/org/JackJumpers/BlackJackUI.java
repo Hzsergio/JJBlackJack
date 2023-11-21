@@ -11,24 +11,38 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlackJackUI extends JFrame {
+public class BlackJackUI extends JFrame implements CardListener{
     private JButton hitButton;
     private JButton standButton;
     private JButton restartButton;
-    private JButton exit;
+    private JButton exitButton;
     private JLabel playerHandArea;
     private JLabel dealerHandArea;
     private JLabel playerHandValue;
     private JLabel dealerHandValue;
     private JLabel gameResult;
 
+    private JPanel backgroundPanel;
+
     private BlackJackGame currentGame;
+    ImagePanel imagePanel1 = null;
+    ImagePanel imagePanel2 = null;
+    ImagePanel imagePanel3 = null;
+    ImagePanel imagePanel4 = null;
 
     private int imageCounter = 4;
+    private int imageCounterDealer = 4;
+
     private List<ImagePanel> dynamicImagePanels = new ArrayList<>();
+    private List<ImagePanel> dynamicImagePanelsDealer = new ArrayList<>();
+
+    private List<ImagePanel> dealImagePanels = new ArrayList<>();
+
 
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
+        game.setCardListener((CardListener) this);
+
     }
 
 
@@ -36,12 +50,11 @@ public class BlackJackUI extends JFrame {
         setTitle("Jack Jumpers Blackjack" + currentGame.getUsername());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
-        String card = "https://deckofcardsapi.com/static/img/6H.png";
         // Load the background image from a URL (replace with your image URL)
         Image backgroundImage = loadImageFromURL("https://assets.codepen.io/74045/green.jpg");
 
         // Create the custom ImageBackgroundPanel with the background image
-        JPanel backgroundPanel = new JPanel() {
+        backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -53,17 +66,8 @@ public class BlackJackUI extends JFrame {
         // Set the green background color
         backgroundPanel.setBackground(new Color(70, 122, 53));
 
-        // Create ImagePanels for each image URL
-        ImagePanel imagePanel1 = new ImagePanel(card);
-        ImagePanel imagePanel2 = new ImagePanel(card);
-        ImagePanel imagePanel3 = new ImagePanel(card);
-        ImagePanel imagePanel4 = new ImagePanel(card);
-
-        // Set bounds for ImagePanels with empty borders for spacing
-        imagePanel1.setBounds(100, 50, 114, 158);
-        imagePanel2.setBounds(230, 50, 114, 158);
-        imagePanel3.setBounds(100, 230, 114, 158);
-        imagePanel4.setBounds(230, 230, 114, 158);
+        //Images were here
+        initialDealImages();
 
         // Create labels
         dealerHandArea = new JLabel(currentGame.calculateDealerHand() + " Dealer");
@@ -86,7 +90,7 @@ public class BlackJackUI extends JFrame {
         standButton = new JButton("Stand");
         restartButton = new JButton("Play Again");
         restartButton.setVisible(false);
-        exit = new JButton("Exit");
+        exitButton = new JButton("Exit");
 
 
 
@@ -94,10 +98,24 @@ public class BlackJackUI extends JFrame {
         hitButton.setBounds(10, 450, 150, 30);
         standButton.setBounds(170, 450, 150, 30);
         restartButton.setBounds(330, 450, 150, 30);
-        exit.setBounds(490, 450, 150, 30);
+        exitButton.setBounds(490, 450, 150, 30);
 
 
-
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Display a confirmation dialog before exiting
+                int choice = JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to exit?",
+                        "Exit Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    // Perform the exit action
+                    System.out.println("Exiting the game..."); // Replace with your exit logic
+                    System.exit(0);
+                }
+            }
+        });
         // Add ActionListener to button1
         hitButton.addActionListener(new ActionListener() {
             @Override
@@ -143,6 +161,12 @@ public class BlackJackUI extends JFrame {
                 currentGame.dealerTurn();
                 updateHandLabels();
                 //Calculate winner
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException ex) {
+//                    throw new RuntimeException(ex);
+//                }
+
                 currentGame.determineWinner();
                 // Show the restart button when the game is over
                 restartButton.setVisible(true);
@@ -151,16 +175,13 @@ public class BlackJackUI extends JFrame {
         });
 
         // Add components to the background panel
-        backgroundPanel.add(imagePanel1);
-        backgroundPanel.add(imagePanel2);
-        backgroundPanel.add(imagePanel3);
-        backgroundPanel.add(imagePanel4);
+
         backgroundPanel.add(dealerHandArea);
         backgroundPanel.add(playerHandArea);
         backgroundPanel.add(hitButton);
         backgroundPanel.add(standButton);
         backgroundPanel.add(restartButton);
-        backgroundPanel.add(exit);
+        backgroundPanel.add(exitButton);
 
 
         // Set up the frame with the custom background panel
@@ -169,6 +190,7 @@ public class BlackJackUI extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
+
 
     private void createAndAddImagePanel() {
         currentGame.Hit();
@@ -180,7 +202,38 @@ public class BlackJackUI extends JFrame {
         dynamicImagePanels.add(newImagePanel);
         revalidate();
         repaint();
+    }
+    private void initialDealImages(){
 
+        List<String> playersCurrentCards = currentGame.getPlayerImages();
+        List<String> dealersCurrentCards = currentGame.getDealerImages();
+
+        // Create ImagePanels for each image URL
+
+
+//        for(String image : playersCurrentCards) {
+            imagePanel3 = new ImagePanel(playersCurrentCards.get(0));
+            dealImagePanels.add(imagePanel3);
+            imagePanel4 = new ImagePanel(playersCurrentCards.get(1));
+            dealImagePanels.add(imagePanel4);
+
+
+//        for(String image : dealersCurrentCards) {
+            imagePanel1 = new ImagePanel(dealersCurrentCards.get(0));
+            imagePanel2 = new ImagePanel(dealersCurrentCards.get(1));
+        dealImagePanels.add(imagePanel1);
+        dealImagePanels.add(imagePanel2);
+
+        // Set bounds for ImagePanels with empty borders for spacing
+        imagePanel1.setBounds(100, 50, 114, 158);
+        imagePanel2.setBounds(230, 50, 114, 158);
+        imagePanel3.setBounds(100, 230, 114, 158);
+        imagePanel4.setBounds(230, 230, 114, 158);
+
+        backgroundPanel.add(imagePanel1);
+        backgroundPanel.add(imagePanel2);
+        backgroundPanel.add(imagePanel3);
+        backgroundPanel.add(imagePanel4);
 
     }
 
@@ -190,14 +243,28 @@ public class BlackJackUI extends JFrame {
         }
         dynamicImagePanels.clear();
         imageCounter = 4;
+        for (ImagePanel ImagePanel : dealImagePanels) {
+            remove(ImagePanel);
+        }
+        dealImagePanels.clear();
+        for (ImagePanel dynamicImagePanel : dynamicImagePanelsDealer) {
+            remove(dynamicImagePanel);
+        }
+        dynamicImagePanelsDealer.clear();
+        imageCounter = 4;
         currentGame.reset();
+        initialDealImages();
         restartButton.setVisible(false);
         hitButton.setEnabled(true);
         standButton.setEnabled(true);
         // Update the display
         updateHandLabels();
-        BlackJackGame.startBet();
+        revalidate();
         repaint();
+//        Thread.sleep(1000);
+        BlackJackGame.startBet();
+
+
     }
 
     private Image loadImageFromURL(String imageUrl) {
@@ -207,6 +274,21 @@ public class BlackJackUI extends JFrame {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void onCardDrawn(Card card) {
+        System.out.println("Card drawn: " + card.getRank() + " of " + card.getSuit());
+
+        updateHandLabels();
+        ImagePanel newImagePanel = new ImagePanel(card.getUrl());
+        newImagePanel.setBounds(100 + (imageCounter - 2) * 130, 50, 114, 158);
+        imageCounterDealer++;
+        add(newImagePanel);
+        dynamicImagePanelsDealer.add(newImagePanel);
+        revalidate();
+        repaint();
+
     }
 
     private static class ImagePanel extends JPanel {

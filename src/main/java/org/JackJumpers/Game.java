@@ -1,5 +1,6 @@
 package org.JackJumpers;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class Game {
@@ -7,18 +8,28 @@ public class Game {
     public static boolean determineWinner(int playerScore, int dealerScore, boolean gameResult) {
         if (playerScore > 21) {
             System.out.println("Dealer wins, you bust!");
+            JOptionPane.showMessageDialog(null, "Dealer wins, you bust!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
             gameResult = false;
         } else if (dealerScore > 21) {
             System.out.println("You win, dealer busts!");
+            JOptionPane.showMessageDialog(null, "You win, dealer busts!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
             gameResult = true;
         } else if (playerScore > dealerScore) {
             System.out.println("You win!");
+            JOptionPane.showMessageDialog(null, "You win!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
             gameResult = true;
         } else if (playerScore < dealerScore) {
             System.out.println("Dealer wins!");
+            JOptionPane.showMessageDialog(null, "Dealer wins!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
             gameResult = false;
         } else {
             System.out.println("It's a tie!");
+            JOptionPane.showMessageDialog(null, "It's a tie!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
         }
         return gameResult;
     }

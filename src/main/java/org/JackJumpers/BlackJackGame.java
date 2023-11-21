@@ -14,6 +14,7 @@ public class BlackJackGame {
     private static UserData player;
 
     private static int currentBet;
+    private CardListener cardListener;
 
     public BlackJackGame(String username) throws URISyntaxException, IOException, InterruptedException {
         // Initialize the deck and hands
@@ -26,7 +27,9 @@ public class BlackJackGame {
         result = false;
         player = UserData.getUserData(username);
     }
-
+    public void setCardListener(CardListener cardListener) {
+        this.cardListener = cardListener;
+    }
     public String getPlayerHand() {
         return playerHand.toString();
     }
@@ -56,6 +59,9 @@ public class BlackJackGame {
             if (card != null) {
                 dealerHand.addCard(card);
             }
+            if (cardListener != null) {
+                cardListener.onCardDrawn(card);
+            }
 
             int handValue = dealerHand.calculateHandValue();
             // If dealer has a soft 17 (Ace counted as 11), they must draw another card
@@ -71,19 +77,29 @@ public class BlackJackGame {
     public void determineWinner() {
         if (calculatePlayerHand() > 21) {
             System.out.println("Dealer wins, you bust!");
+            JOptionPane.showMessageDialog(null, "Dealer wins, you bust!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
         } else if (calculateDealerHand() > 21) {
             result = true;
             winBet();
             System.out.println("You win, dealer busts!");
+            JOptionPane.showMessageDialog(null, "You win, dealer busts!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
         } else if (calculatePlayerHand() > calculateDealerHand()) {
             result = true;
             winBet();
             System.out.println("You win!");
+            JOptionPane.showMessageDialog(null, "You win!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
         } else if (calculatePlayerHand() < calculateDealerHand()) {
             System.out.println("Dealer Wins");
+            JOptionPane.showMessageDialog(null, "Dealer wins!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
         } else if (calculatePlayerHand() == calculateDealerHand()) {
             tieBet();
             System.out.println("It's a tie!");
+            JOptionPane.showMessageDialog(null, "It's a tie!",
+                    "Information", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -113,7 +129,7 @@ public class BlackJackGame {
     public static void startBet() {
         boolean validBet = false;
         while (!validBet) {
-            String betAmountString = JOptionPane.showInputDialog("Current Points: " + player.getPoints() + "\nHow much do you want to bet?:");
+            String betAmountString = JOptionPane.showInputDialog(null,"Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet",JOptionPane.QUESTION_MESSAGE);
 
             int betAmount = Integer.parseInt(betAmountString);
 

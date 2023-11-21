@@ -1,7 +1,7 @@
 package org.JackJumpers;
 
 enum Suit {
-    HEARTS, DIAMONDS, CLUBS, SPADES
+    SPADES, DIAMONDS, CLUBS, HEARTS
 }
 
 enum Rank {
