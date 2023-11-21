@@ -141,11 +141,9 @@ public class BlackJackUI extends JFrame implements CardListener{
             public void actionPerformed(ActionEvent e) {
                 try {
                     resetToDefault(); // Reset the page to the default state
-                } catch (URISyntaxException ex) {
+                } catch (URISyntaxException | InterruptedException ex) {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
             }
