@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UserRegistration {
-
+//demo
     public static boolean addUser(String username, String password) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             // Check if the username is already taken
