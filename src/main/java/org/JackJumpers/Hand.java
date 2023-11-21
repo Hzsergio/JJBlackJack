@@ -85,7 +85,7 @@ public class Hand {
 
     public void playerHit(Deck deck) {
         Card card = deck.drawCard();
-        System.out.println(card.getUrl());
+//        System.out.println(card.getUrl());
         addCard(card);
     }
 

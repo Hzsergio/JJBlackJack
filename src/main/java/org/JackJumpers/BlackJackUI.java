@@ -280,7 +280,7 @@ public class BlackJackUI extends JFrame implements CardListener{
 
         updateHandLabels();
         ImagePanel newImagePanel = new ImagePanel(card.getUrl());
-        newImagePanel.setBounds(100 + (imageCounter - 2) * 130, 50, 114, 158);
+        newImagePanel.setBounds(100 + (imageCounterDealer - 2) * 130, 50, 114, 158);
         imageCounterDealer++;
         add(newImagePanel);
         dynamicImagePanelsDealer.add(newImagePanel);
