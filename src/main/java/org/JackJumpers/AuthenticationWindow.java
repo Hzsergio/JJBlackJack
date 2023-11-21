@@ -15,9 +15,11 @@ public class AuthenticationWindow {
     private JPasswordField passwordField;
 
     public AuthenticationWindow() {
-        frame = new JFrame("User Authentication");
+
+        frame = new JFrame("BlackJack Login");
         frame.setSize(300, 150);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.setLayout(new GridLayout(3, 2));
 
         JLabel usernameLabel = new JLabel("Username:");
@@ -68,7 +70,7 @@ public class AuthenticationWindow {
         }
     }
 
-    private void startGame(String username) throws URISyntaxException, IOException, InterruptedException {
+    public void startGame(String username) throws URISyntaxException, IOException, InterruptedException {
         // Assuming you have a method to start the game with the authenticated user
         BlackJackGame game = new BlackJackGame(username);
         BlackJackUI ui = new BlackJackUI(game);

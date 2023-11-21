@@ -67,6 +67,10 @@ public class Deck {
         }
     }
 
+    public void addCardToDeck(Card card){
+        cards.add(card);
+    }
+
     public Card drawCard() {
         // Remove and return a card from the deck
         if (cards.isEmpty()) {
@@ -75,4 +79,6 @@ public class Deck {
         int index = (int) (Math.random() * cards.size());
         return cards.remove(index);
     }
+
+
 }

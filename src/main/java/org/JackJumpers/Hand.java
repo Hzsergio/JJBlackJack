@@ -1,5 +1,6 @@
 package org.JackJumpers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Hand {
@@ -84,6 +85,7 @@ public class Hand {
 
     public void playerHit(Deck deck) {
         Card card = deck.drawCard();
+        System.out.println(card.getUrl());
         addCard(card);
     }
 
@@ -102,6 +104,28 @@ public class Hand {
         return false;
     }
 
+    public List<String> getCardImages() {
+        List<String> cardImages = new ArrayList<>();
+        for (Card card : cards) {
+            cardImages.add(card.getUrl());
+        }
+        return cardImages;
+    }
+
+    public void returnToDeck(Deck deck){
+        for(Card card : cards){
+            deck.addCardToDeck(card);
+
+        }
+    }
+
+    public String getLatestCardImage(){
+        if (!cards.isEmpty()) {
+            return cards.get(cards.size() - 1).getUrl();
+        } else {
+            return null;  // Handle the case when the hand is empty
+        }
+    }
     @Override
     public String toString() {
         StringBuilder handString = new StringBuilder();

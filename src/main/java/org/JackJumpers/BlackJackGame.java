@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BlackJackGame {
     private Deck deck;
@@ -67,29 +68,29 @@ public class BlackJackGame {
 
     }
 
-    public String determineWinner() {
+    public void determineWinner() {
         if (calculatePlayerHand() > 21) {
-            return "Dealer wins, you bust!";
+            System.out.println("Dealer wins, you bust!");
         } else if (calculateDealerHand() > 21) {
             result = true;
             winBet();
-            return "You win, dealer busts!";
+            System.out.println("You win, dealer busts!");
         } else if (calculatePlayerHand() > calculateDealerHand()) {
             result = true;
             winBet();
-            return "You win!";
+            System.out.println("You win!");
         } else if (calculatePlayerHand() < calculateDealerHand()) {
-            return "Dealer Wins";
+            System.out.println("Dealer Wins");
         } else if (calculatePlayerHand() == calculateDealerHand()) {
             tieBet();
-            return "It's a tie!";
+            System.out.println("It's a tie!");
         }
-        return null;
     }
 
 
     public void reset() throws URISyntaxException, IOException, InterruptedException {
-        deck = new Deck();
+//        deck = new Deck();
+        resetDeck();
         deck.shuffle();
         playerHand = new Hand(new ArrayList<>());
         dealerHand = new Hand(new ArrayList<>());
@@ -125,7 +126,21 @@ public class BlackJackGame {
 
         }
     }
+    public String latestImage(){
+        return playerHand.getLatestCardImage();
 
+    }
+    public List<String> getPlayerImages(){
+        return playerHand.getCardImages();
+    }
+
+    public List<String> getDealerImages(){
+        return dealerHand.getCardImages();
+    }
+    public void resetDeck(){
+        playerHand.returnToDeck(deck);
+        dealerHand.returnToDeck(deck);
+    }
     public void winBet() {
         player.winningBet(currentBet);
     }
