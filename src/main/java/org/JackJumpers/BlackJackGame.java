@@ -12,9 +12,10 @@ public class BlackJackGame {
     private Hand dealerHand;
     private boolean result;
     private static UserData player;
-
     private static int currentBet;
+    private static String gameEndMessage;
     private CardListener cardListener;
+
 
     public BlackJackGame(String username) throws URISyntaxException, IOException, InterruptedException {
         // Initialize the deck and hands
@@ -28,6 +29,10 @@ public class BlackJackGame {
         player = UserData.getUserData(username);
     }
 
+    public static String getGameEndMessage() {
+        return gameEndMessage;
+    }
+
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
     }
@@ -39,7 +44,9 @@ public class BlackJackGame {
     public int calculateDealerHand() {
         return dealerHand.calculateHandValue();
     }
-
+    public int calculateHiddenHand() {
+        return dealerHand.calculateHiddenHandValue();
+    }
     public void Hit() {
         playerHand.playerHit(deck);
     }
@@ -69,33 +76,22 @@ public class BlackJackGame {
 
     public void determineWinner() {
         if (calculatePlayerHand() > 21) {
-            System.out.println("Dealer wins, you bust!");
-            JOptionPane.showMessageDialog(null, "Dealer wins, you bust!",
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
+            gameEndMessage = "Dealer wins, you bust!";
         } else if (calculateDealerHand() > 21) {
             result = true;
             winBet();
-            System.out.println("You win, dealer busts!");
-            JOptionPane.showMessageDialog(null, "You win, dealer busts!",
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
+            gameEndMessage = "You win, dealer busts!";
         } else if (calculatePlayerHand() > calculateDealerHand()) {
             result = true;
             winBet();
-            System.out.println("You win!");
-            JOptionPane.showMessageDialog(null, "You win!",
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
+            gameEndMessage = "You win!";
         } else if (calculatePlayerHand() < calculateDealerHand()) {
-            System.out.println("Dealer Wins");
-            JOptionPane.showMessageDialog(null, "Dealer wins!",
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
+            gameEndMessage = "Dealer Wins";
         } else if (calculatePlayerHand() == calculateDealerHand()) {
             tieBet();
-            System.out.println("It's a tie!");
-            JOptionPane.showMessageDialog(null, "It's a tie!",
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
+            gameEndMessage = "It's a tie!";
         }
     }
-
 
     public void reset() throws URISyntaxException, IOException, InterruptedException {
         resetDeck();

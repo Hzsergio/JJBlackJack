@@ -66,6 +66,54 @@ public class Hand {
 
         return handValue;
     }
+    public int calculateHiddenHandValue() {
+        if (cards.size() < 2) {
+            return 0;
+        }
+
+        int handValue = 0;
+        // Consider only the second card (index 1) in the dealer's hand
+        Card secondCard = cards.get(1);
+        Rank secondCardRank = secondCard.getRank();
+
+        switch (secondCardRank) {
+            case ACE:
+                handValue += 1;
+                break;
+            case TWO:
+                handValue += 2;
+                break;
+            case THREE:
+                handValue += 3;
+                break;
+            case FOUR:
+                handValue += 4;
+                break;
+            case FIVE:
+                handValue += 5;
+                break;
+            case SIX:
+                handValue += 6;
+                break;
+            case SEVEN:
+                handValue += 7;
+                break;
+            case EIGHT:
+                handValue += 8;
+                break;
+            case NINE:
+                handValue += 9;
+                break;
+            case TEN:
+            case JACK:
+            case QUEEN:
+            case KING:
+                handValue += 10;
+                break;
+        }
+
+        return handValue;
+    }
 
     public void deal(Deck deck) {
         for (int i = 0; i < 2; i++) {
