@@ -2,8 +2,6 @@ package org.JackJumpers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -18,10 +16,6 @@ public class BlackJackUI extends JFrame implements CardListener {
     private JButton exitButton;
     private JLabel playerHandArea;
     private JLabel dealerHandArea;
-    private JLabel playerHandValue;
-    private JLabel dealerHandValue;
-    private JLabel gameResult;
-
     private JPanel backgroundPanel;
 
     private final BlackJackGame currentGame;
@@ -47,7 +41,7 @@ public class BlackJackUI extends JFrame implements CardListener {
 
 
     public void createUI() {
-        setTitle("Jack Jumpers Blackjack" + currentGame.getUsername());
+        setTitle("Jack Jumpers Blackjack Playing as: " + currentGame.getUsername());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         // Load the background image from a URL (replace with your image URL)
@@ -83,7 +77,7 @@ public class BlackJackUI extends JFrame implements CardListener {
         playerHandArea.setBounds(10, 270, 100, 50);
         dealerHandArea.setForeground(Color.WHITE);
 
-// Change font color for label2 (example: blue)
+        // Change font color for label2 (example: blue)
         playerHandArea.setForeground(Color.YELLOW);
         // Create buttons
         hitButton = new JButton("Hit");
@@ -98,78 +92,6 @@ public class BlackJackUI extends JFrame implements CardListener {
         standButton.setBounds(170, 450, 150, 30);
         restartButton.setBounds(330, 450, 150, 30);
         exitButton.setBounds(490, 450, 150, 30);
-
-
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Display a confirmation dialog before exiting
-                int choice = JOptionPane.showConfirmDialog(null,
-                        "Are you sure you want to exit?",
-                        "Exit Confirmation",
-                        JOptionPane.YES_NO_OPTION);
-                if (choice == JOptionPane.YES_OPTION) {
-                    // Perform the exit action
-                    System.out.println("Exiting the game..."); // Replace with your exit logic
-                    System.exit(0);
-                }
-            }
-        });
-        // Add ActionListener to button1
-        hitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createAndAddImagePanel(); // Create a new ImagePanel and add it
-                if (currentGame.calculatePlayerHand() > 21) {
-                    // Disable the buttons
-                    hitButton.setEnabled(false);
-                    standButton.setEnabled(false);
-
-                    //Determine Winner
-                    currentGame.determineWinner();
-                    currentGame.updateWinLoss();
-                    // Show the restart button when the game is over
-                    restartButton.setVisible(true);
-                }
-            }
-        });
-
-        // Add ActionListener to button2
-        restartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    resetToDefault(); // Reset the page to the default state
-                } catch (URISyntaxException | InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
-        standButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hitButton.setEnabled(false);
-                standButton.setEnabled(false);
-
-                // Handle dealers stand action
-                currentGame.dealerTurn();
-                updateHandLabels();
-                //Calculate winner
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException ex) {
-//                    throw new RuntimeException(ex);
-//                }
-
-                currentGame.determineWinner();
-                // Show the restart button when the game is over
-                restartButton.setVisible(true);
-                currentGame.updateWinLoss();
-            }
-        });
 
         // Add components to the background panel
 
@@ -186,6 +108,62 @@ public class BlackJackUI extends JFrame implements CardListener {
         setSize(750, 520);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        SwingUtilities.invokeLater(this::callBet);
+
+        exitButton.addActionListener(e -> {
+            // Display a confirmation dialog before exiting
+            int choice = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to exit?",
+                    "Exit Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                // Perform the exit action
+                System.out.println("Exiting the game..."); // Replace with your exit logic
+                System.exit(0);
+            }
+        });
+        // Add ActionListener to button1
+        hitButton.addActionListener(e -> {
+            createAndAddImagePanel(); // Create a new ImagePanel and add it
+            if (currentGame.calculatePlayerHand() > 21) {
+                // Disable the buttons
+                hitButton.setEnabled(false);
+                standButton.setEnabled(false);
+
+                //Determine Winner
+                currentGame.determineWinner();
+                currentGame.updateWinLoss();
+                // Show the restart button when the game is over
+                restartButton.setVisible(true);
+            }
+        });
+
+        // Add ActionListener to button2
+        restartButton.addActionListener(e -> {
+            try {
+                resetToDefault(); // Reset the page to the default state
+            } catch (URISyntaxException | InterruptedException | IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        standButton.addActionListener(e -> {
+            hitButton.setEnabled(false);
+            standButton.setEnabled(false);
+
+            // Handle dealers stand action
+            currentGame.dealerTurn();
+            updateHandLabels();
+
+
+            currentGame.determineWinner();
+            // Show the restart button when the game is over
+            restartButton.setVisible(true);
+            currentGame.updateWinLoss();
+        });
+
+
     }
 
 
@@ -259,8 +237,7 @@ public class BlackJackUI extends JFrame implements CardListener {
         updateHandLabels();
         revalidate();
         repaint();
-//        Thread.sleep(1000);
-        BlackJackGame.startBet();
+        SwingUtilities.invokeLater(this::callBet);
 
 
     }
@@ -313,7 +290,11 @@ public class BlackJackUI extends JFrame implements CardListener {
     private void updateHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateDealerHand() + " Dealer");
-//        playerHandValue.setText("Player current score: " + currentGame.calculatePlayerHand());
-//        dealerHandValue.setText("Dealer current score: " + currentGame.calculateDealerHand());
+
+    }
+
+    private void callBet(){
+        BlackJackGame.startBet();
+
     }
 }

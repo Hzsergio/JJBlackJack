@@ -65,6 +65,5 @@ public class AuthenticationWindow {
         BlackJackUI ui = new BlackJackUI(game);
         ui.createUI();
         ui.setVisible(true);
-        BlackJackGame.startBet();
     }
 }
