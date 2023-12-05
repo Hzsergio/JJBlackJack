@@ -16,9 +16,7 @@ public class Deck {
 
     public Deck() throws URISyntaxException, IOException, InterruptedException {
         cards = new ArrayList<>();
-        apiCard apicard = new apiCard();
         Gson gson = new Gson();
-        apiDeck apideck = new apiDeck();
         HttpRequest getRequest = HttpRequest.newBuilder()
                 .uri(new URI("https://www.deckofcardsapi.com/api/deck/new/"))
                 .build();
@@ -26,18 +24,18 @@ public class Deck {
         HttpClient httpClient = HttpClient.newHttpClient();
 
         HttpResponse<String> getResponse = httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
-        apideck = gson.fromJson(getResponse.body(), apiDeck.class);
+        apiDeck apideck = gson.fromJson(getResponse.body(), apiDeck.class);
         String deck_id = apideck.getDeck_id();
 
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
 
                 HttpRequest getCard = HttpRequest.newBuilder()
-                        .uri(new URI("https://www.deckofcardsapi.com/api/deck/" + apideck.getDeck_id() + "/draw/?count=1"))
+                        .uri(new URI("https://www.deckofcardsapi.com/api/deck/" + deck_id + "/draw/?count=1"))
                         .build();
 
                 HttpResponse<String> cardResponse = httpClient.send(getCard, HttpResponse.BodyHandlers.ofString());
-                apicard = gson.fromJson(cardResponse.body(), apiCard.class);
+                apiCard apicard = gson.fromJson(cardResponse.body(), apiCard.class);
                 List<apiCard.CardInfo> cardInfoList = apicard.getCards();
                 if (cardInfoList != null && !cardInfoList.isEmpty()) {
                     apiCard.CardInfo cardInfo = cardInfoList.get(0);
