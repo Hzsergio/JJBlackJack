@@ -1,13 +1,9 @@
 package org.JackJumpers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class UserRegistration {
-//demo
+    //demo
     public static boolean addUser(String username, String password) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             // Check if the username is already taken

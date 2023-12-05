@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlackJackUI extends JFrame implements CardListener{
+public class BlackJackUI extends JFrame implements CardListener {
     private JButton hitButton;
     private JButton standButton;
     private JButton restartButton;
@@ -24,7 +24,7 @@ public class BlackJackUI extends JFrame implements CardListener{
 
     private JPanel backgroundPanel;
 
-    private BlackJackGame currentGame;
+    private final BlackJackGame currentGame;
     ImagePanel imagePanel1 = null;
     ImagePanel imagePanel2 = null;
     ImagePanel imagePanel3 = null;
@@ -33,15 +33,15 @@ public class BlackJackUI extends JFrame implements CardListener{
     private int imageCounter = 4;
     private int imageCounterDealer = 4;
 
-    private List<ImagePanel> dynamicImagePanels = new ArrayList<>();
-    private List<ImagePanel> dynamicImagePanelsDealer = new ArrayList<>();
+    private final List<ImagePanel> dynamicImagePanels = new ArrayList<>();
+    private final List<ImagePanel> dynamicImagePanelsDealer = new ArrayList<>();
 
-    private List<ImagePanel> dealImagePanels = new ArrayList<>();
+    private final List<ImagePanel> dealImagePanels = new ArrayList<>();
 
 
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
-        game.setCardListener((CardListener) this);
+        game.setCardListener(this);
 
     }
 
@@ -71,7 +71,7 @@ public class BlackJackUI extends JFrame implements CardListener{
 
         // Create labels
         dealerHandArea = new JLabel(currentGame.calculateDealerHand() + " Dealer");
-        playerHandArea = new JLabel(currentGame.calculatePlayerHand()+ " Player");
+        playerHandArea = new JLabel(currentGame.calculatePlayerHand() + " Player");
 
         // Set font for labels
         Font labelFont = new Font("Arial", Font.BOLD, 16);
@@ -91,7 +91,6 @@ public class BlackJackUI extends JFrame implements CardListener{
         restartButton = new JButton("Play Again");
         restartButton.setVisible(false);
         exitButton = new JButton("Exit");
-
 
 
         // Set bounds for buttons
@@ -201,7 +200,8 @@ public class BlackJackUI extends JFrame implements CardListener{
         revalidate();
         repaint();
     }
-    private void initialDealImages(){
+
+    private void initialDealImages() {
 
         List<String> playersCurrentCards = currentGame.getPlayerImages();
         List<String> dealersCurrentCards = currentGame.getDealerImages();
@@ -210,15 +210,15 @@ public class BlackJackUI extends JFrame implements CardListener{
 
 
 //        for(String image : playersCurrentCards) {
-            imagePanel3 = new ImagePanel(playersCurrentCards.get(0));
-            dealImagePanels.add(imagePanel3);
-            imagePanel4 = new ImagePanel(playersCurrentCards.get(1));
-            dealImagePanels.add(imagePanel4);
+        imagePanel3 = new ImagePanel(playersCurrentCards.get(0));
+        dealImagePanels.add(imagePanel3);
+        imagePanel4 = new ImagePanel(playersCurrentCards.get(1));
+        dealImagePanels.add(imagePanel4);
 
 
 //        for(String image : dealersCurrentCards) {
-            imagePanel1 = new ImagePanel(dealersCurrentCards.get(0));
-            imagePanel2 = new ImagePanel(dealersCurrentCards.get(1));
+        imagePanel1 = new ImagePanel(dealersCurrentCards.get(0));
+        imagePanel2 = new ImagePanel(dealersCurrentCards.get(1));
         dealImagePanels.add(imagePanel1);
         dealImagePanels.add(imagePanel2);
 
@@ -309,6 +309,7 @@ public class BlackJackUI extends JFrame implements CardListener{
             }
         }
     }
+
     private void updateHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateDealerHand() + " Dealer");

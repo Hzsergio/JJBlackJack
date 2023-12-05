@@ -5,14 +5,10 @@ import java.util.List;
 
 public class Hand {
 
-    private List<Card> cards;
+    private final List<Card> cards;
 
     public Hand(List<Card> cards) {
         this.cards = cards;
-    }
-
-    public List<Card> getCards() {
-        return cards;
     }
 
     public void addCard(Card card) {
@@ -112,20 +108,21 @@ public class Hand {
         return cardImages;
     }
 
-    public void returnToDeck(Deck deck){
-        for(Card card : cards){
+    public void returnToDeck(Deck deck) {
+        for (Card card : cards) {
             deck.addCardToDeck(card);
 
         }
     }
 
-    public String getLatestCardImage(){
+    public String getLatestCardImage() {
         if (!cards.isEmpty()) {
             return cards.get(cards.size() - 1).getUrl();
         } else {
             return null;  // Handle the case when the hand is empty
         }
     }
+
     @Override
     public String toString() {
         StringBuilder handString = new StringBuilder();

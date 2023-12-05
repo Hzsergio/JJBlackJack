@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Deck {
-    private List<Card> cards;
+    private final List<Card> cards;
 
     public Deck() throws URISyntaxException, IOException, InterruptedException {
         cards = new ArrayList<>();
@@ -53,10 +53,6 @@ public class Deck {
         }
     }
 
-    public List<Card> getCards() {
-        return cards;
-    }
-
     public void shuffle() {
         int n = cards.size();
         for (int i = n - 1; i > 0; i--) {
@@ -67,7 +63,7 @@ public class Deck {
         }
     }
 
-    public void addCardToDeck(Card card){
+    public void addCardToDeck(Card card) {
         cards.add(card);
     }
 

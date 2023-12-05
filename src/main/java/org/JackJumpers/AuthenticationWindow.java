@@ -2,17 +2,15 @@ package org.JackJumpers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class AuthenticationWindow {
-    private JFrame frame;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+    private final JFrame frame;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
 
     public AuthenticationWindow() {
 
@@ -28,12 +26,7 @@ public class AuthenticationWindow {
         passwordField = new JPasswordField();
 
         JButton loginButton = new JButton("Login");
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                authenticateUser();
-            }
-        });
+        loginButton.addActionListener(e -> authenticateUser());
 
         frame.add(usernameLabel);
         frame.add(usernameField);
@@ -61,11 +54,7 @@ public class AuthenticationWindow {
         } catch (SQLException ex) {
             ex.printStackTrace();
             // Handle database connection error
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

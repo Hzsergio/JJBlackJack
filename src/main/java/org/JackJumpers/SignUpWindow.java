@@ -6,10 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SignUpWindow {
-    private JFrame frame;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JButton signupButton;
+    private final JFrame frame;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
+    private final JButton signupButton;
 
     public SignUpWindow() {
         frame = new JFrame("Signup");

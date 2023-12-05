@@ -10,7 +10,7 @@ public class UserData {
     private int losses;
     private static int points;
 
-    private String user;
+    private final String user;
 
     public UserData(int wins, int losses, int points, String username) {
         this.wins = wins;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlackJackGame {
-    private Deck deck;
+    private final Deck deck;
     private Hand playerHand;
     private Hand dealerHand;
     private boolean result;
@@ -27,15 +27,9 @@ public class BlackJackGame {
         result = false;
         player = UserData.getUserData(username);
     }
+
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
-    }
-    public String getPlayerHand() {
-        return playerHand.toString();
-    }
-
-    public String getDealerHand() {
-        return dealerHand.toString();
     }
 
     public int calculatePlayerHand() {
@@ -50,7 +44,6 @@ public class BlackJackGame {
         playerHand.playerHit(deck);
     }
 
-    //    public void dealerTurn() {Game.dealerTurn(dealerHand, deck);}'
     public void dealerTurn() {
 //    int soft17 = 17;
 
@@ -105,7 +98,6 @@ public class BlackJackGame {
 
 
     public void reset() throws URISyntaxException, IOException, InterruptedException {
-//        deck = new Deck();
         resetDeck();
         deck.shuffle();
         playerHand = new Hand(new ArrayList<>());
@@ -129,7 +121,7 @@ public class BlackJackGame {
     public static void startBet() {
         boolean validBet = false;
         while (!validBet) {
-            String betAmountString = JOptionPane.showInputDialog(null,"Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet",JOptionPane.QUESTION_MESSAGE);
+            String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
 
             int betAmount = Integer.parseInt(betAmountString);
 
@@ -142,21 +134,25 @@ public class BlackJackGame {
 
         }
     }
-    public String latestImage(){
+
+    public String latestImage() {
         return playerHand.getLatestCardImage();
 
     }
-    public List<String> getPlayerImages(){
+
+    public List<String> getPlayerImages() {
         return playerHand.getCardImages();
     }
 
-    public List<String> getDealerImages(){
+    public List<String> getDealerImages() {
         return dealerHand.getCardImages();
     }
-    public void resetDeck(){
+
+    public void resetDeck() {
         playerHand.returnToDeck(deck);
         dealerHand.returnToDeck(deck);
     }
+
     public void winBet() {
         player.winningBet(currentBet);
     }

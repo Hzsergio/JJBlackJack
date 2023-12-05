@@ -2,14 +2,10 @@ package org.JackJumpers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class Menu {
-    private JFrame frame;
-    private JButton loginButton;
-    private JButton leaderboardsButton;
-    private JButton createAccountButton;
+    private final JFrame frame;
 
     public Menu() {
         frame = new JFrame("Main Menu");
@@ -18,68 +14,41 @@ public class Menu {
         frame.setLayout(new GridLayout(3, 2));
         frame.setLocationRelativeTo(null);
 
-        loginButton = new JButton("Login");
-        leaderboardsButton = new JButton(("Leaderboards"));
-        createAccountButton = new JButton("Create Account");
-
-        // Add action listeners to the buttons
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openLoginWindow();
-            }
-        });
-
-        leaderboardsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Implement leaderboards logic
-                JOptionPane.showMessageDialog(frame, "Leaderboards feature coming soon!");
-            }
-        });
-
-        createAccountButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openSignupWindow();
-            }
-        });
+        JButton loginButton = new JButton("Login");
+        JButton leaderboardsButton = new JButton(("Leaderboards"));
+        JButton createAccountButton = new JButton("Create Account");
 
         frame.add(loginButton);
         frame.add(leaderboardsButton);
         frame.add(createAccountButton);
 
         frame.setVisible(true);
+
+        // Add action listeners to the buttons
+        loginButton.addActionListener(e -> openLoginWindow());
+
+        leaderboardsButton.addActionListener(e -> {
+            // Implement leaderboards logic
+            JOptionPane.showMessageDialog(frame, "Leaderboards feature coming soon!");
+        });
+
+        createAccountButton.addActionListener(e -> openSignupWindow());
+
+
     }
 
     private void openLoginWindow() {
         frame.dispose(); // Close the main menu window
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new AuthenticationWindow(); // Assuming AuthenticationWindow is for login
-            }
-        });
+        // Assuming AuthenticationWindow is for login
+        SwingUtilities.invokeLater(AuthenticationWindow::new);
     }
 
     private void openSignupWindow() {
         frame.dispose(); // Close the main menu window
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new SignUpWindow(); // Create a new window for signup
-            }
-        });
+        // Create a new window for signup
+        SwingUtilities.invokeLater(SignUpWindow::new);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Menu();
-            }
-        });
-    }
 }
