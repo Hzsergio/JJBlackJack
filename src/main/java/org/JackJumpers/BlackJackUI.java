@@ -132,7 +132,7 @@ public class BlackJackUI extends JFrame implements CardListener {
                 // Disable the buttons
                 hitButton.setEnabled(false);
                 standButton.setEnabled(false);
-                revealDealerCards();
+                SwingUtilities.invokeLater(this::revealDealerCards);
 
                 //Determine Winner
                 currentGame.determineWinner();
@@ -141,7 +141,7 @@ public class BlackJackUI extends JFrame implements CardListener {
                     // Additional UI-related setup code if needed
 
                     // Now, schedule the bet window to open after a delay
-                    Timer timer = new Timer(500, new ActionListener() { // 1000 milliseconds (1 second) delay
+                    Timer timer = new Timer(1000, new ActionListener() { // 1000 milliseconds (1 second) delay
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             gameEndDisplay();
@@ -182,7 +182,6 @@ public class BlackJackUI extends JFrame implements CardListener {
                 timer.setRepeats(false); // Execute only once
                 timer.start();
             });
-//            currentGame.dealerTurn();
             updateHandLabels();
 
 
@@ -193,7 +192,7 @@ public class BlackJackUI extends JFrame implements CardListener {
                 // Additional UI-related setup code if needed
 
                 // Now, schedule the bet window to open after a delay
-                Timer timer = new Timer(1000, new ActionListener() { // 1000 milliseconds (1 second) delay
+                Timer timer = new Timer(1500, new ActionListener() { // 1000 milliseconds (1 second) delay
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         gameEndDisplay();

@@ -52,7 +52,6 @@ public class BlackJackGame {
     }
 
     public void dealerTurn() {
-//    int soft17 = 17;
 
         while (dealerHand.calculateHandValue() < 17) {
             Card card = deck.drawCard();
