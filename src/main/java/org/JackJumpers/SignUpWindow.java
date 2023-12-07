@@ -2,16 +2,13 @@ package org.JackJumpers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SignUpWindow {
     private final JFrame frame;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
-    private final JButton signupButton;
 
-    public SignUpWindow() {
+    public SignUpWindow(JFrame previousFrame) {
         frame = new JFrame("Signup");
         frame.setSize(300, 150);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,24 +17,23 @@ public class SignUpWindow {
 
         usernameField = new JTextField();
         passwordField = new JPasswordField();
-        signupButton = new JButton("Signup");
+        JButton signupButton = new JButton("Signup");
+        JButton backButton = new JButton("Back");
 
         // Add action listener to the signup button
-        signupButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSignup();
-            }
-        });
 
         frame.add(new JLabel("Username:"));
         frame.add(usernameField);
         frame.add(new JLabel("Password:"));
         frame.add(passwordField);
-        frame.add(new JLabel()); // Empty label for spacing
         frame.add(signupButton);
+        frame.add(backButton);
 
         frame.setVisible(true);
+        backButton.addActionListener(e -> goBack(previousFrame));
+        signupButton.addActionListener(e -> performSignup());
+
+
     }
 
     private void performSignup() {
@@ -45,7 +41,6 @@ public class SignUpWindow {
         char[] passwordChars = passwordField.getPassword();
         String password = new String(passwordChars);
 
-        // TODO: Call the addUser method to register the user
         boolean signupSuccessful = UserRegistration.addUser(username, password);
 
         if (signupSuccessful) {
@@ -58,11 +53,11 @@ public class SignUpWindow {
     }
 
     private void openMainMenu() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Menu(); // Open the main menu window
-            }
-        });
+        // Open the main menu window
+        SwingUtilities.invokeLater(Menu::new);
+    }
+    private void goBack(JFrame previousFrame) {
+        frame.dispose(); // Close the current window
+        previousFrame.setVisible(true); // Show the previous frame (menu)
     }
 }

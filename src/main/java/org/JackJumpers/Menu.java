@@ -27,10 +27,7 @@ public class Menu {
         // Add action listeners to the buttons
         loginButton.addActionListener(e -> openLoginWindow());
 
-        leaderboardsButton.addActionListener(e -> {
-            // Implement leaderboards logic
-            JOptionPane.showMessageDialog(frame, "Leaderboards feature coming soon!");
-        });
+        leaderboardsButton.addActionListener(e -> openLeaderboard());
 
         createAccountButton.addActionListener(e -> openSignupWindow());
 
@@ -41,14 +38,24 @@ public class Menu {
         frame.dispose(); // Close the main menu window
 
         // Assuming AuthenticationWindow is for login
-        SwingUtilities.invokeLater(AuthenticationWindow::new);
+//        SwingUtilities.invokeLater(LoginWindow::new);
+        SwingUtilities.invokeLater(() -> {
+            LoginWindow login = new LoginWindow(frame);
+        });
     }
 
     private void openSignupWindow() {
         frame.dispose(); // Close the main menu window
 
         // Create a new window for signup
-        SwingUtilities.invokeLater(SignUpWindow::new);
+        SwingUtilities.invokeLater(() -> {
+            SignUpWindow signup = new SignUpWindow(frame);
+        });
+    }
+    private void openLeaderboard() {
+        // Implement the logic to display the leaderboard
+        // Instantiate the BlackjackLeaderboard class
+        SwingUtilities.invokeLater(LeaderBoard::new);
     }
 
 }

@@ -7,12 +7,12 @@ import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class AuthenticationWindow {
+public class LoginWindow {
     private final JFrame frame;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
 
-    public AuthenticationWindow() {
+    public LoginWindow(JFrame previousFrame) {
 
         frame = new JFrame("BlackJack Login");
         frame.setSize(300, 150);
@@ -26,15 +26,20 @@ public class AuthenticationWindow {
         passwordField = new JPasswordField();
 
         JButton loginButton = new JButton("Login");
-        loginButton.addActionListener(e -> authenticateUser());
+
+
+        JButton backButton = new JButton("Back");
 
         frame.add(usernameLabel);
         frame.add(usernameField);
         frame.add(passwordLabel);
         frame.add(passwordField);
         frame.add(loginButton);
-
+        frame.add(backButton);
         frame.setVisible(true);
+
+        loginButton.addActionListener(e -> authenticateUser());
+        backButton.addActionListener(e -> goBack(previousFrame));
     }
 
     private void authenticateUser() {
@@ -59,8 +64,12 @@ public class AuthenticationWindow {
         }
     }
 
+    private void goBack(JFrame previousFrame) {
+        frame.dispose(); // Close the current window
+        previousFrame.setVisible(true); // Show the previous frame (menu)
+    }
+
     public void startGame(String username) throws URISyntaxException, IOException, InterruptedException {
-        // Assuming you have a method to start the game with the authenticated user
         BlackJackGame game = new BlackJackGame(username);
         BlackJackUI ui = new BlackJackUI(game);
         ui.createUI();

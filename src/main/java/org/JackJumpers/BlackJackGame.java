@@ -1,6 +1,8 @@
 package org.JackJumpers;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -13,6 +15,11 @@ public class BlackJackGame {
     private boolean result;
     private static UserData player;
     private static int currentBet;
+
+    public static int getCurrentBet() {
+        return currentBet;
+    }
+
     private static String gameEndMessage;
     private CardListener cardListener;
 
@@ -52,7 +59,6 @@ public class BlackJackGame {
     }
 
     public void dealerTurn() {
-
         while (dealerHand.calculateHandValue() < 17) {
             Card card = deck.drawCard();
             if (card != null) {
@@ -63,6 +69,8 @@ public class BlackJackGame {
             }
 
             int handValue = dealerHand.calculateHandValue();
+            System.out.println("TEST Dealer Score: " + calculateDealerHand());
+
             // If dealer has a soft 17 (Ace counted as 11), they must draw another card
             if (handValue >= 17 && handValue <= 21 && dealerHand.containsAce()) continue;
             else if (handValue >= 17) {
@@ -70,10 +78,11 @@ public class BlackJackGame {
                 break;
             }
         }
-
     }
 
     public void determineWinner() {
+        System.out.println("Player Score: " + calculatePlayerHand());
+        System.out.println("Dealer Score: " + calculateDealerHand());
         if (calculatePlayerHand() > 21) {
             gameEndMessage = "Dealer wins, you bust!";
         } else if (calculateDealerHand() > 21) {
@@ -113,23 +122,44 @@ public class BlackJackGame {
         player.updateStats();
     }
 
+//    public static void startBet() {
+//        boolean validBet = false;
+//        while (!validBet) {
+//            String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
+//
+//            int betAmount = Integer.parseInt(betAmountString);
+//
+//            if (UserData.canBet(betAmount)) {
+//                currentBet = betAmount;
+//                player.placeBet(betAmount);
+//                validBet = true;
+//            }
+//
+//
+//        }
+//    }
     public static void startBet() {
-        boolean validBet = false;
-        while (!validBet) {
-            String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
+    boolean validBet = false;
+    while (!validBet) {
+//        String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
+//
+//        int betAmount = Integer.parseInt(betAmountString);
 
-            int betAmount = Integer.parseInt(betAmountString);
+            // Call BetDialog to get the bet amount
+        int betAmount = BetDialog.getBetAmount(null, player.getPoints()); // You can pass null or create a JFrame if needed
 
-            if (UserData.canBet(betAmount)) {
-                currentBet = betAmount;
-                player.placeBet(betAmount);
-                validBet = true;
-            }
+        System.out.println("Selected Bet Amount: " + betAmount);
 
 
+        if (player.canBet(betAmount)) {
+            currentBet = betAmount;
+            player.placeBet(betAmount);
+            validBet = true;
         }
-    }
 
+
+    }
+}
     public String latestImage() {
         return playerHand.getLatestCardImage();
 
@@ -154,6 +184,10 @@ public class BlackJackGame {
 
     public void tieBet() {
         player.tieBet(currentBet);
+    }
+
+    public static int getPoints(){
+        return player.getPoints();
     }
 }
 

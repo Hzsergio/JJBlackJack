@@ -8,14 +8,14 @@ import java.sql.SQLException;
 public class UserData {
     private int wins;
     private int losses;
-    private static int points;
+    private int points;
 
     private final String user;
 
     public UserData(int wins, int losses, int points, String username) {
         this.wins = wins;
         this.losses = losses;
-        UserData.points = points;
+        this.points = points;
         this.user = username;
     }
 
@@ -41,7 +41,7 @@ public class UserData {
         return null; // Return null if user data retrieval fails
     }
 
-    public static boolean canBet(int betAmount) {
+    public boolean canBet(int betAmount) {
         return points >= betAmount;
     }
 
@@ -71,7 +71,7 @@ public class UserData {
     }
 
     public void updateStats() {
-        if (points <= 0) points = 1000;
+        if (points <= 0) points = 100;
         UserStatistics.updateUserStats(user, wins, losses, points);
 
     }
@@ -82,7 +82,7 @@ public class UserData {
     }
 
     public void winningBet(int currentBet) {
-        points = points + (currentBet * 2);
+        points += (currentBet * 2);
     }
 
     public void tieBet(int currentBet) {
