@@ -37,8 +37,6 @@ public class Menu {
     private void openLoginWindow() {
         frame.dispose(); // Close the main menu window
 
-        // Assuming AuthenticationWindow is for login
-//        SwingUtilities.invokeLater(LoginWindow::new);
         SwingUtilities.invokeLater(() -> {
             LoginWindow login = new LoginWindow(frame);
         });
@@ -53,8 +51,6 @@ public class Menu {
         });
     }
     private void openLeaderboard() {
-        // Implement the logic to display the leaderboard
-        // Instantiate the BlackjackLeaderboard class
         SwingUtilities.invokeLater(LeaderBoard::new);
     }
 
