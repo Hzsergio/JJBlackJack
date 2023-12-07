@@ -77,7 +77,7 @@ public class BlackJackUI extends JFrame implements CardListener {
         // Create labels
         dealerHandArea = new JLabel(currentGame.calculateHiddenHand() + " Dealer");
         playerHandArea = new JLabel(currentGame.calculatePlayerHand() + " Player");
-        pointInfo = new JLabel("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + BlackJackGame.getPoints());
+        pointInfo = new JLabel("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (BlackJackGame.getPoints() + BlackJackGame.getCurrentBet()));
         // Set font for labels
         Font labelFont = new Font("Arial", Font.BOLD, 16);
         dealerHandArea.setFont(labelFont);
@@ -345,8 +345,8 @@ public class BlackJackUI extends JFrame implements CardListener {
 //        repaint();
 //
 //    }
-@Override
-public void onCardDrawn(Card card) {
+    @Override
+    public void onCardDrawn(Card card) {
     Timer cardDrawTimer = new Timer(1000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -365,10 +365,6 @@ public void onCardDrawn(Card card) {
     cardDrawTimer.setRepeats(false);
     cardDrawTimer.start();
 }
-
-
-
-
 
     private static class ImagePanel extends JPanel {
     private ImageIcon imageIcon;
@@ -398,11 +394,10 @@ public void onCardDrawn(Card card) {
     }
 }
 
-
     private void resetHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateHiddenHand() + " Dealer");
-        pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet());
+        pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (BlackJackGame.getPoints() + BlackJackGame.getCurrentBet()));
     }
     private void updatePlayerHandLabel() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
@@ -410,7 +405,6 @@ public void onCardDrawn(Card card) {
     private void updateHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateDealerHand() + " Dealer");
-
     }
     private void callBet(){
         BlackJackGame.startBet();

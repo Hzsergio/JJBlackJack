@@ -4,9 +4,6 @@ import java.util.List;
 
 public class apiCard {
     private List<CardInfo> cards;
-
-    // Getters and setters...
-
     public List<CardInfo> getCards() {
         return cards;
     }

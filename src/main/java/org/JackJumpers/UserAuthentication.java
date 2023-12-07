@@ -16,9 +16,9 @@ public class UserAuthentication {
                 if (resultSet.next()) {
                     // Retrieve the password from the database
                     String storedPassword = resultSet.getString("password");
-                    System.out.println("Provided username: " + username);
-                    System.out.println("Provided password: " + password);
-                    System.out.println("Stored password: " + storedPassword);
+//                    System.out.println("Provided username: " + username);
+//                    System.out.println("Provided password: " + password);
+//                    System.out.println("Stored password: " + storedPassword);
                     // Compare the provided password with the stored password
                     return password.equals(storedPassword);
                 }

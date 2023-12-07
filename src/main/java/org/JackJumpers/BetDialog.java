@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 public class BetDialog extends JDialog {
     private int betAmount;
-    private JTextField betTextField;
+    private final JTextField betTextField;
 
     public BetDialog(JFrame parent, int initialBetAmount) {
         super(parent, "Place Your Bet:", true);
@@ -58,7 +58,7 @@ public class BetDialog extends JDialog {
     }
 
     private class BetButtonListener implements ActionListener {
-        private int amount;
+        private final int amount;
 
         public BetButtonListener(int amount) {
             this.amount = amount;

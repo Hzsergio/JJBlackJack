@@ -1,8 +1,5 @@
 package org.JackJumpers;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -101,7 +98,7 @@ public class BlackJackGame {
         }
     }
 
-    public void reset() throws URISyntaxException, IOException, InterruptedException {
+    public void reset() {
         resetDeck();
         deck.shuffle();
         playerHand = new Hand(new ArrayList<>());
