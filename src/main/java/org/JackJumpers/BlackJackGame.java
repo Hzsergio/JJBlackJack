@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BlackJackGame {
     private final Deck deck;
     private Hand playerHand;
@@ -57,6 +58,7 @@ public class BlackJackGame {
 
     public void dealerTurn() {
         while (dealerHand.calculateHandValue() < 17) {
+
             Card card = deck.drawCard();
             if (card != null) {
                 dealerHand.addCard(card);
@@ -74,8 +76,9 @@ public class BlackJackGame {
                 // The dealer has a hard 17 or higher, they stand
                 break;
             }
-        }
-    }
+        }//end of while loop
+    }//end of dealer turn
+
 
     public void determineWinner() {
         System.out.println("Player Score: " + calculatePlayerHand());
@@ -119,22 +122,6 @@ public class BlackJackGame {
         player.updateStats();
     }
 
-//    public static void startBet() {
-//        boolean validBet = false;
-//        while (!validBet) {
-//            String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
-//
-//            int betAmount = Integer.parseInt(betAmountString);
-//
-//            if (UserData.canBet(betAmount)) {
-//                currentBet = betAmount;
-//                player.placeBet(betAmount);
-//                validBet = true;
-//            }
-//
-//
-//        }
-//    }
     public static void startBet() {
     boolean validBet = false;
     while (!validBet) {
