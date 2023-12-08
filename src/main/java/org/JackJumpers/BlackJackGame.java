@@ -1,12 +1,14 @@
 package org.JackJumpers;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class BlackJackGame {//wrol
+public class BlackJackGame {
     private final Deck deck;
     private Hand playerHand;
     private Hand dealerHand;
@@ -58,7 +60,6 @@ public class BlackJackGame {//wrol
 
     public void dealerTurn() {
         while (dealerHand.calculateHandValue() < 17) {
-
             Card card = deck.drawCard();
             if (card != null) {
                 dealerHand.addCard(card);
@@ -76,9 +77,8 @@ public class BlackJackGame {//wrol
                 // The dealer has a hard 17 or higher, they stand
                 break;
             }
-        }//end of while loop
-    }//end of dealer turn
-
+        }
+    }
 
     public void determineWinner() {
         System.out.println("Player Score: " + calculatePlayerHand());
@@ -101,7 +101,7 @@ public class BlackJackGame {//wrol
         }
     }
 
-    public void reset() {
+    public void reset() throws URISyntaxException, IOException, InterruptedException {
         resetDeck();
         deck.shuffle();
         playerHand = new Hand(new ArrayList<>());
@@ -122,6 +122,22 @@ public class BlackJackGame {//wrol
         player.updateStats();
     }
 
+//    public static void startBet() {
+//        boolean validBet = false;
+//        while (!validBet) {
+//            String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
+//
+//            int betAmount = Integer.parseInt(betAmountString);
+//
+//            if (UserData.canBet(betAmount)) {
+//                currentBet = betAmount;
+//                player.placeBet(betAmount);
+//                validBet = true;
+//            }
+//
+//
+//        }
+//    }
     public static void startBet() {
     boolean validBet = false;
     while (!validBet) {
