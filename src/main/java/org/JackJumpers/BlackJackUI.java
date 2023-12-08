@@ -33,17 +33,14 @@ public class BlackJackUI extends JFrame implements CardListener {
 
     private final List<ImagePanel> dynamicImagePanels = new ArrayList<>();
     private final List<ImagePanel> dynamicImagePanelsDealer = new ArrayList<>();
-
     private final List<ImagePanel> dealImagePanels = new ArrayList<>();
-
-
+    private Timer timer;
+    private int currentStep;//hi
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
         game.setCardListener(this);
 
     }
-
-
     public void createUI() {
         setTitle("Jack Jumpers Blackjack Playing as: " + currentGame.getUsername());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,13 +68,12 @@ public class BlackJackUI extends JFrame implements CardListener {
         setVisible(true);
 
         callBet();
-        //Images were here
         initialDealImages();
 
         // Create labels
         dealerHandArea = new JLabel(currentGame.calculateHiddenHand() + " Dealer");
         playerHandArea = new JLabel(currentGame.calculatePlayerHand() + " Player");
-        pointInfo = new JLabel("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + BlackJackGame.getPoints());
+        pointInfo = new JLabel("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (BlackJackGame.getPoints() + BlackJackGame.getCurrentBet()));
         // Set font for labels
         Font labelFont = new Font("Arial", Font.BOLD, 16);
         dealerHandArea.setFont(labelFont);
@@ -119,6 +115,16 @@ public class BlackJackUI extends JFrame implements CardListener {
         backgroundPanel.add(exitButton);
         revalidate();
         repaint();
+        // Initialize the timer
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleTimerTick();
+            }
+        });
+        currentStep = 0;
+
+
 
         exitButton.addActionListener(e -> {
             // Display a confirmation dialog before exiting
@@ -140,7 +146,6 @@ public class BlackJackUI extends JFrame implements CardListener {
                 hitButton.setEnabled(false);
                 standButton.setEnabled(false);
                 SwingUtilities.invokeLater(this::revealDealerCards);
-
                 //Determine Winner
                 currentGame.determineWinner();
                 currentGame.updateWinLoss();
@@ -171,69 +176,25 @@ public class BlackJackUI extends JFrame implements CardListener {
             }
         });
 
-//        standButton.addActionListener(e -> {
-//                    hitButton.setEnabled(false);
-//                    standButton.setEnabled(false);
-//                    revealDealerCards();
-//                    currentGame.dealerTurn();
-//                    updateHandLabels();
-//
-//            SwingUtilities.invokeLater(() -> currentGame.determineWinner());
-//            currentGame.updateWinLoss();
-//            SwingUtilities.invokeLater(() -> {
-//                // Additional UI-related setup code if needed
-//
-//                // Now, schedule the bet window to open after a delay
-//                Timer timer = new Timer(1500, new ActionListener() { // 1000 milliseconds (1 second) delay
-//                    @Override
-//                    public void actionPerformed(ActionEvent e) {
-//                        gameEndDisplay();
-//                    }
-//                });
-//                timer.setRepeats(false); // Execute only once
-//                timer.start();
-//            });
-//
-//            // Show the restart button when the game is over
+        standButton.addActionListener(e -> {
+//            hitButton.setEnabled(false);
+//            standButton.setEnabled(false);
+//            revealDealerCards();
+//            currentGame.dealerTurn();
+//            updateHandLabels();
+//            currentGame.determineWinner();
+//            gameEndDisplay();
 //            restartButton.setVisible(true);
 //
-//        });
-        standButton.addActionListener(e -> {
             hitButton.setEnabled(false);
             standButton.setEnabled(false);
 
-            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    revealDealerCards();
-                    currentGame.dealerTurn();
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    Timer updateTimer = new Timer(2000, new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            updateHandLabels();
-                            currentGame.determineWinner();
-                            gameEndDisplay();
-                            restartButton.setVisible(true);
-                            hitButton.setEnabled(true);
-                        }
-                    });
-                    updateTimer.setRepeats(false);
-                    updateTimer.start();
-                }
-            };
-
-            worker.execute();
+            // Start the timer to introduce delays
+            timer.start();
         });
 
 
     }//end of createUI
-
-
     private void createAndAddImagePanel() {
         currentGame.Hit();
         updatePlayerHandLabel();
@@ -245,7 +206,6 @@ public class BlackJackUI extends JFrame implements CardListener {
         revalidate();
         repaint();
     }
-
     private void initialDealImages() {
 
         String backOfCard = "https://www.deckofcardsapi.com/static/img/back.png";
@@ -281,14 +241,14 @@ public class BlackJackUI extends JFrame implements CardListener {
 
     }
     public void revealDealerCards(){
-            List<String> dealersCurrentCards = currentGame.getDealerImages();
+        List<String> dealersCurrentCards = currentGame.getDealerImages();
 
-            // Assuming dealersCurrentCards contains URLs for each dealer card
-            if (dealersCurrentCards.size() >= 2) {
-                // Assuming index 0 is the first dealer card and index 1 is the second dealer card
-                imagePanel1.setImage(dealersCurrentCards.get(0)); // Set the image for the first dealer card
-                imagePanel2.setImage(dealersCurrentCards.get(1)); // Set the image for the second dealer card
-            }
+        // Assuming dealersCurrentCards contains URLs for each dealer card
+        if (dealersCurrentCards.size() >= 2) {
+            // Assuming index 0 is the first dealer card and index 1 is the second dealer card
+            imagePanel1.setImage(dealersCurrentCards.get(0)); // Set the image for the first dealer card
+            imagePanel2.setImage(dealersCurrentCards.get(1)); // Set the image for the second dealer card
+        }
         updateHandLabels();
     }
     private void resetToDefault() throws URISyntaxException, IOException, InterruptedException {
@@ -314,6 +274,7 @@ public class BlackJackUI extends JFrame implements CardListener {
         standButton.setEnabled(true);
         // Update the display
         resetHandLabels();
+        currentStep = 0;
         revalidate();
         repaint();
 //        SwingUtilities.invokeLater(this::callBet);
@@ -321,7 +282,6 @@ public class BlackJackUI extends JFrame implements CardListener {
 
 
     }
-
     private Image loadImageFromURL(String imageUrl) {
         try {
             return new ImageIcon(new URL(imageUrl)).getImage();
@@ -331,78 +291,52 @@ public class BlackJackUI extends JFrame implements CardListener {
         }
     }
 
-//    @Override
-//    public void onCardDrawn(Card card) {
-//        System.out.println("Card drawn: " + card.getRank() + " of " + card.getSuit());
-//
-//        updateHandLabels();
-//        ImagePanel newImagePanel = new ImagePanel(card.getUrl());
-//        newImagePanel.setBounds(100 + (imageCounterDealer - 2) * 130, 50, 114, 158);
-//        imageCounterDealer++;
-//        add(newImagePanel);
-//        dynamicImagePanelsDealer.add(newImagePanel);
-//        revalidate();
-//        repaint();
-//
-//    }
-@Override
-public void onCardDrawn(Card card) {
-    Timer cardDrawTimer = new Timer(1000, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("Card drawn: " + card.getRank() + " of " + card.getSuit());
+    @Override
+    public void onCardDrawn(Card card) {
+        System.out.println("Card drawn: " + card.getRank() + " of " + card.getSuit());
 
-            updateHandLabels();
-            ImagePanel newImagePanel = new ImagePanel(card.getUrl());
-            newImagePanel.setBounds(100 + (imageCounterDealer - 2) * 130, 50, 114, 158);
-            imageCounterDealer++;
-            add(newImagePanel);
-            dynamicImagePanelsDealer.add(newImagePanel);
-            revalidate();
-            repaint();
-        }
-    });
-    cardDrawTimer.setRepeats(false);
-    cardDrawTimer.start();
-}
+        updateHandLabels();
+        ImagePanel newImagePanel = new ImagePanel(card.getUrl());
+        newImagePanel.setBounds(100 + (imageCounterDealer - 2) * 130, 50, 114, 158);
+        imageCounterDealer++;
+        add(newImagePanel);
+        dynamicImagePanelsDealer.add(newImagePanel);
+        revalidate();
+        repaint();
 
-
-
-
+    }
 
     private static class ImagePanel extends JPanel {
-    private ImageIcon imageIcon;
+        private ImageIcon imageIcon;
 
-    public ImagePanel(String imageUrl) {
-        setImage(imageUrl);
-    }
+        public ImagePanel(String imageUrl) {
+            setImage(imageUrl);
+        }
 
-    public void setImage(String imageUrl) {
-        try {
-            Image originalImage = new ImageIcon(new URL(imageUrl)).getImage();
-            int newWidth = (int) (originalImage.getWidth(this) * 0.5);
-            int newHeight = (int) (originalImage.getHeight(this) * 0.5);
-            imageIcon = new ImageIcon(originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT));
-            repaint(); // Repaint the panel to update the displayed image
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        public void setImage(String imageUrl) {
+            try {
+                Image originalImage = new ImageIcon(new URL(imageUrl)).getImage();
+                int newWidth = (int) (originalImage.getWidth(this) * 0.5);
+                int newHeight = (int) (originalImage.getHeight(this) * 0.5);
+                imageIcon = new ImageIcon(originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT));
+                repaint(); // Repaint the panel to update the displayed image
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (imageIcon != null) {
+                g.drawImage(imageIcon.getImage(), 0, 0, this);
+            }
         }
     }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (imageIcon != null) {
-            g.drawImage(imageIcon.getImage(), 0, 0, this);
-        }
-    }
-}
-
-
     private void resetHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateHiddenHand() + " Dealer");
-        pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet());
+        pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (BlackJackGame.getPoints() + BlackJackGame.getCurrentBet()));
     }
     private void updatePlayerHandLabel() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
@@ -410,17 +344,45 @@ public void onCardDrawn(Card card) {
     private void updateHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateDealerHand() + " Dealer");
-
     }
     private void callBet(){
         BlackJackGame.startBet();
 
     }
-
     private void gameEndDisplay(){
         String message = BlackJackGame.getGameEndMessage();
 
         JOptionPane.showMessageDialog(null, message,
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
+                "Information", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    private void handleTimerTick() {
+        // Perform actions based on the current step
+        switch (currentStep) {
+            case 0:
+                revealDealerCards();
+                break;
+            case 1:
+                currentGame.dealerTurn();
+                break;
+            case 2:
+                updateHandLabels();
+                break;
+            case 3:
+                currentGame.determineWinner();
+                break;
+            case 4:
+                gameEndDisplay();
+                break;
+            case 5:
+                // All steps completed, stop the timer
+                timer.stop();
+                restartButton.setVisible(true);
+                break;
+        }
+
+        // Move to the next step
+        currentStep++;
+    }
+
 }
