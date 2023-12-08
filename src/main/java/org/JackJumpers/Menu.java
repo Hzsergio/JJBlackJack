@@ -7,7 +7,7 @@ import java.awt.*;
 public class Menu {
     private final JFrame frame;
 
-    public Menu() {
+    public Menu() {//test
         frame = new JFrame("Main Menu");
         frame.setSize(300, 150);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
