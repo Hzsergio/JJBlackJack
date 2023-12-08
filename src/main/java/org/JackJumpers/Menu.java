@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
-public class Menu {
+public class Menu {//pls
     private final JFrame frame;
 
     public Menu() {

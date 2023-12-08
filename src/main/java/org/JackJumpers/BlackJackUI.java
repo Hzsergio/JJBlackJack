@@ -35,7 +35,7 @@ public class BlackJackUI extends JFrame implements CardListener {
     private final List<ImagePanel> dynamicImagePanelsDealer = new ArrayList<>();
     private final List<ImagePanel> dealImagePanels = new ArrayList<>();
     private Timer timer;
-    private int currentStep;
+    private int currentStep;//hi
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
         game.setCardListener(this);
