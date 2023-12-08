@@ -153,7 +153,7 @@ public class BlackJackUI extends JFrame implements CardListener {
                     // Additional UI-related setup code if needed
 
                     // Now, schedule the bet window to open after a delay
-                    Timer timer = new Timer(1000, new ActionListener() { // 1000 milliseconds (1 second) delay
+                    Timer timer = new Timer(800, new ActionListener() { // 1000 milliseconds (1 second) delay
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             gameEndDisplay();

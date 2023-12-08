@@ -13,23 +13,7 @@ public class Menu {//pls
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create a JPanel with a background image
-        JPanel backgroundPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                try {
-                    // Load the background image from a URL
-                    URL imageURL = new URL("https://i.postimg.cc/76xPY18K/menuimage.png");
-                    Image backgroundImage = ImageIO.read(imageURL);
-                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        // Set layout for the background panel
-        backgroundPanel.setLayout(null);
+        JPanel backgroundPanel = getjPanel();
 
         // Create buttons
         JButton loginButton = new JButton("Login");
@@ -57,6 +41,27 @@ public class Menu {//pls
         loginButton.addActionListener(e -> openLoginWindow());
         leaderboardsButton.addActionListener(e -> openLeaderboard());
         createAccountButton.addActionListener(e -> openSignupWindow());
+    }
+
+    private JPanel getjPanel() {
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    // Load the background image from a URL
+                    URL imageURL = new URL("https://i.postimg.cc/76xPY18K/menuimage.png");
+                    Image backgroundImage = ImageIO.read(imageURL);
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        // Set layout for the background panel
+        backgroundPanel.setLayout(null);
+        return backgroundPanel;
     }
 
     private void openLoginWindow() {
