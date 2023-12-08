@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class Menu {
+public class Menu {//pls
     private final JFrame frame;
 
     public Menu() {//test
