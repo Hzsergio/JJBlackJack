@@ -1,8 +1,5 @@
 package org.JackJumpers;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -16,9 +13,6 @@ public class BlackJackGame {
     private static UserData player;
     private static int currentBet;
 
-    public static int getCurrentBet() {
-        return currentBet;
-    }
 
     private static String gameEndMessage;
     private CardListener cardListener;
@@ -51,9 +45,11 @@ public class BlackJackGame {
     public int calculateDealerHand() {
         return dealerHand.calculateHandValue();
     }
+
     public int calculateHiddenHand() {
         return dealerHand.calculateHiddenHandValue();
     }
+
     public void Hit() {
         playerHand.playerHit(deck);
     }
@@ -122,7 +118,7 @@ public class BlackJackGame {
         player.updateStats();
     }
 
-//    public static void startBet() {
+    //    public static void startBet() {
 //        boolean validBet = false;
 //        while (!validBet) {
 //            String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
@@ -138,28 +134,29 @@ public class BlackJackGame {
 //
 //        }
 //    }
-    public static void startBet() {
-    boolean validBet = false;
-    while (!validBet) {
-//        String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
-//
-//        int betAmount = Integer.parseInt(betAmountString);
-
-            // Call BetDialog to get the bet amount
-        int betAmount = BetDialog.getBetAmount(null, player.getPoints()); // You can pass null or create a JFrame if needed
-
-        System.out.println("Selected Bet Amount: " + betAmount);
-
-
-        if (player.canBet(betAmount)) {
-            currentBet = betAmount;
-            player.placeBet(betAmount);
-            validBet = true;
-        }
-
-
+    public static int getCurrentBet() {
+        return currentBet;
     }
-}
+
+    public static void startBet() {
+        boolean validBet = false;
+        while (!validBet) {
+            // Call BetDialog to get the bet amount
+            int betAmount = BetDialog.getBetAmount(null, player.getPoints()); // You can pass null or create a JFrame if needed
+
+            System.out.println("Selected Bet Amount: " + betAmount);
+
+
+            if (player.canBet(betAmount)) {
+                currentBet = betAmount;
+                player.placeBet(betAmount);
+                validBet = true;
+            }
+
+
+        }
+    }
+
     public String latestImage() {
         return playerHand.getLatestCardImage();
 
@@ -186,9 +183,20 @@ public class BlackJackGame {
         player.tieBet(currentBet);
     }
 
-    public static int getPoints(){
+    public  int getPoints() {
         return player.getPoints();
     }
-}
 
+    public boolean canDoubleDown() {
+        int doubleBet = currentBet * 2;
+        return player.canBet(doubleBet);
+
+    }
+
+    public void doubleBet(){
+        player.placeBet(currentBet);
+        currentBet *= 2;
+
+    }
+}
 

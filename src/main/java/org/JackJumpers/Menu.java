@@ -16,14 +16,14 @@ public class Menu {//pls
         JPanel backgroundPanel = getjPanel();
 
         // Create buttons
-        JButton loginButton = new JButton("Login");
+        JButton loginButton = new JButton("Play");
         JButton leaderboardsButton = new JButton("Leaderboards");
         JButton createAccountButton = new JButton("Create Account");
 
         // Set x-y coordinates for the buttons
-        loginButton.setBounds(50, 450, 100, 30);
-        leaderboardsButton.setBounds(200, 450, 150, 30);
-        createAccountButton.setBounds(400, 450, 150, 30);
+        loginButton.setBounds(225, 500, 100, 30);
+        leaderboardsButton.setBounds(0, 510, 150, 30);
+        createAccountButton.setBounds(400, 510, 150, 30);
 
         // Add buttons to the background panel
         backgroundPanel.add(loginButton);
@@ -33,7 +33,7 @@ public class Menu {//pls
         // Set the background panel as the content pane
         frame.setContentPane(backgroundPanel);
 
-        frame.setSize(550, 550);
+        frame.setSize(550, 575);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 

@@ -2,8 +2,6 @@ package org.JackJumpers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -16,8 +14,8 @@ public class BlackJackUI extends JFrame implements CardListener {
     private JButton standButton;
     private JButton restartButton;
     private JButton exitButton;
-
     private JButton musicButton;
+    private JButton doubleButton;
     private JLabel playerHandArea;
     private JLabel dealerHandArea;
 
@@ -41,7 +39,7 @@ public class BlackJackUI extends JFrame implements CardListener {
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
         game.setCardListener(this);
-        MusicPlayer.playMusic();
+//        MusicPlayer.playMusic();
 
     }
     public void createUI() {
@@ -71,12 +69,13 @@ public class BlackJackUI extends JFrame implements CardListener {
         setVisible(true);
 
         callBet();
+        SwingUtilities.invokeLater(this::showDoubleDown);
         initialDealImages();
 
         // Create labels
         dealerHandArea = new JLabel(currentGame.calculateHiddenHand() + " Dealer");
         playerHandArea = new JLabel(currentGame.calculatePlayerHand() + " Player");
-        pointInfo = new JLabel("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (BlackJackGame.getPoints() + BlackJackGame.getCurrentBet()));
+        pointInfo = new JLabel("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + currentGame.getPoints());
         // Set font for labels
         Font labelFont = new Font("Arial", Font.BOLD, 16);
         dealerHandArea.setFont(labelFont);
@@ -100,14 +99,16 @@ public class BlackJackUI extends JFrame implements CardListener {
         restartButton.setVisible(false);
         exitButton = new JButton("Exit");
         musicButton = new JButton("Stop Music");
+        doubleButton = new JButton("Double Down");
 
 
         // Set bounds for buttons
-        hitButton.setBounds(10, 450, 150, 30);
-        standButton.setBounds(170, 450, 150, 30);
-        restartButton.setBounds(330, 450, 150, 30);
-        exitButton.setBounds(490, 450, 100, 30);
-        musicButton.setBounds(600, 450, 100, 30);
+        hitButton.setBounds(10, 450, 75, 30);
+        standButton.setBounds(95, 450, 75, 30);
+        restartButton.setBounds(330, 450, 100, 30);
+        exitButton.setBounds(600, 450, 75, 30);
+        musicButton.setBounds(600, 5, 100, 30);
+        doubleButton.setBounds(180, 450, 125, 30);
 
 
         // Add components to the background panel
@@ -120,15 +121,11 @@ public class BlackJackUI extends JFrame implements CardListener {
         backgroundPanel.add(restartButton);
         backgroundPanel.add(exitButton);
         backgroundPanel.add(musicButton);
+        backgroundPanel.add(doubleButton);
         revalidate();
         repaint();
         // Initialize the timer
-        timer = new Timer(700, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleTimerTick();
-            }
-        });
+        timer = new Timer(700, e -> handleTimerTick());
         currentStep = 0;
 
 
@@ -147,6 +144,7 @@ public class BlackJackUI extends JFrame implements CardListener {
         });
         // Add ActionListener to button1
         hitButton.addActionListener(e -> {
+            doubleButton.setVisible(false);
             createAndAddImagePanel(); // Create a new ImagePanel and add it
             if (currentGame.calculatePlayerHand() > 21) {
                 // Disable the buttons
@@ -160,18 +158,39 @@ public class BlackJackUI extends JFrame implements CardListener {
                     // Additional UI-related setup code if needed
 
                     // Now, schedule the bet window to open after a delay
-                    Timer timer = new Timer(800, new ActionListener() { // 1000 milliseconds (1 second) delay
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            gameEndDisplay();
-                        }
-                    });
+                    // 1000 milliseconds (1 second) delay
+                    Timer timer = new Timer(800, e1 -> gameEndDisplay());
                     timer.setRepeats(false); // Execute only once
                     timer.start();
                 });
                 // Show the restart button when the game is over
                 restartButton.setVisible(true);
             }
+        });
+
+        doubleButton.addActionListener(e -> {
+//            createAndAddImagePanel();
+            doubleDown();
+            createAndAddImagePanel();
+            hitButton.setEnabled(false);
+            standButton.setEnabled(false);
+            if (currentGame.calculatePlayerHand() > 21) {
+                SwingUtilities.invokeLater(this::revealDealerCards);
+                //Determine Winner
+                currentGame.determineWinner();
+                currentGame.updateWinLoss();
+                SwingUtilities.invokeLater(() -> {
+
+                            // Now, schedule the bet window to open after a delay
+                            // 1000 milliseconds (1 second) delay
+                            Timer timer = new Timer(800, e1 -> gameEndDisplay());
+                            timer.setRepeats(false); // Execute only once
+                            timer.start();
+                        });
+            }
+            else timer.start();
+
+
         });
 
         // Add ActionListener to button2
@@ -284,6 +303,7 @@ public class BlackJackUI extends JFrame implements CardListener {
         restartButton.setVisible(false);
         hitButton.setEnabled(true);
         standButton.setEnabled(true);
+        showDoubleDown();
         // Update the display
         resetHandLabels();
         currentStep = 0;
@@ -348,7 +368,7 @@ public class BlackJackUI extends JFrame implements CardListener {
     private void resetHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateHiddenHand() + " Dealer");
-        pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (BlackJackGame.getPoints() + BlackJackGame.getCurrentBet()));
+        pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (currentGame.getPoints() + BlackJackGame.getCurrentBet()));
     }
     private void updatePlayerHandLabel() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
@@ -382,6 +402,7 @@ public class BlackJackUI extends JFrame implements CardListener {
                 break;
             case 3:
                 currentGame.determineWinner();
+                currentGame.updateWinLoss();
                 break;
             case 4:
                 gameEndDisplay();
@@ -401,4 +422,23 @@ public class BlackJackUI extends JFrame implements CardListener {
         MusicPlayer.playMusic();
     }
 
+    public void showDoubleDown() {
+        if (currentGame.canDoubleDown()) {
+            doubleButton.setVisible(true);
+            doubleButton.setEnabled(true);
+        }
+        else {
+            doubleButton.setVisible(false);
+            doubleButton.setEnabled(false);
+        }
+        revalidate();
+        repaint();
+    }
+
+    public void doubleDown(){
+        currentGame.doubleBet();
+        pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + currentGame.getPoints());
+        doubleButton.setVisible(false);
+
+    }
 }
