@@ -16,6 +16,8 @@ public class BlackJackUI extends JFrame implements CardListener {
     private JButton standButton;
     private JButton restartButton;
     private JButton exitButton;
+
+    private JButton musicButton;
     private JLabel playerHandArea;
     private JLabel dealerHandArea;
 
@@ -39,6 +41,7 @@ public class BlackJackUI extends JFrame implements CardListener {
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
         game.setCardListener(this);
+        MusicPlayer.playMusic();
 
     }
     public void createUI() {
@@ -96,13 +99,16 @@ public class BlackJackUI extends JFrame implements CardListener {
         restartButton = new JButton("Play Again");
         restartButton.setVisible(false);
         exitButton = new JButton("Exit");
+        musicButton = new JButton("Stop Music");
 
 
         // Set bounds for buttons
         hitButton.setBounds(10, 450, 150, 30);
         standButton.setBounds(170, 450, 150, 30);
         restartButton.setBounds(330, 450, 150, 30);
-        exitButton.setBounds(490, 450, 150, 30);
+        exitButton.setBounds(490, 450, 100, 30);
+        musicButton.setBounds(600, 450, 100, 30);
+
 
         // Add components to the background panel
 
@@ -113,10 +119,11 @@ public class BlackJackUI extends JFrame implements CardListener {
         backgroundPanel.add(standButton);
         backgroundPanel.add(restartButton);
         backgroundPanel.add(exitButton);
+        backgroundPanel.add(musicButton);
         revalidate();
         repaint();
         // Initialize the timer
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(700, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleTimerTick();
@@ -129,7 +136,7 @@ public class BlackJackUI extends JFrame implements CardListener {
         exitButton.addActionListener(e -> {
             // Display a confirmation dialog before exiting
             int choice = JOptionPane.showConfirmDialog(null,
-                    "Are you sure you want to exit?",
+                    "Are you sure you want to exit? \n (Placed bets will not be returned)",
                     "Exit Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
@@ -191,6 +198,11 @@ public class BlackJackUI extends JFrame implements CardListener {
 
             // Start the timer to introduce delays
             timer.start();
+        });
+        musicButton.addActionListener(e -> {
+            boolean musicStatus = MusicPlayer.toggleMusic();
+            if(musicStatus) musicButton.setText("Stop Music");
+            else musicButton.setText("Play Music");
         });
 
 
@@ -383,6 +395,10 @@ public class BlackJackUI extends JFrame implements CardListener {
 
         // Move to the next step
         currentStep++;
+    }
+
+    private void startMusic(){
+        MusicPlayer.playMusic();
     }
 
 }
