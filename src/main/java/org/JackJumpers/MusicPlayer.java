@@ -70,4 +70,8 @@ public class MusicPlayer {
         File sound = new File("resources/lose.wav");
         playSound(sound);
     }
+    public static void cardSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        File sound = new File("resources/taking-card.wav");
+        playSound(sound);
+    }
 }

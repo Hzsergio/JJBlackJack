@@ -150,7 +150,11 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         // Add ActionListener to button1
         hitButton.addActionListener(e -> {
             doubleButton.setVisible(false);
-            createAndAddImagePanel(); // Create a new ImagePanel and add it
+            try {
+                createAndAddImagePanel(); // Create a new ImagePanel and add it
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+                throw new RuntimeException(ex);
+            }
             if (currentGame.calculatePlayerHand() > 21) {
                 // Disable the buttons
                 hitButton.setEnabled(false);
@@ -182,7 +186,11 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
         doubleButton.addActionListener(e -> {
             doubleDown();
-            createAndAddImagePanel();
+            try {
+                createAndAddImagePanel();
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+                throw new RuntimeException(ex);
+            }
             hitButton.setEnabled(false);
             standButton.setEnabled(false);
             if (currentGame.calculatePlayerHand() > 21) {
@@ -245,7 +253,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
 
     }//end of createUI
-    private void createAndAddImagePanel() {
+    private void createAndAddImagePanel() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         currentGame.Hit();
         updatePlayerHandLabel();
         ImagePanel newImagePanel = new ImagePanel(currentGame.latestImage());
@@ -255,6 +263,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         dynamicImagePanels.add(newImagePanel);
         revalidate();
         repaint();
+        MusicPlayer.cardSound();
     }
     private void initialDealImages() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
 
@@ -338,7 +347,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         }
     }
     @Override
-    public void onCardDrawn(Card card) {
+    public void onCardDrawn(Card card) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         System.out.println("Card drawn: " + card.getRank() + " of " + card.getSuit());
 
         updateHandLabels();
@@ -349,7 +358,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         dynamicImagePanelsDealer.add(newImagePanel);
         revalidate();
         repaint();
-
+        MusicPlayer.cardSound();
     }
     private static class ImagePanel extends JPanel {
         private ImageIcon imageIcon;
@@ -399,9 +408,8 @@ public class BlackJackUI extends CustomIcon implements CardListener {
     private void gameEndDisplay() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         String message = BlackJackGame.getGameEndMessage();
         if(currentGame.getResult()) MusicPlayer.winSound();
-        else if (!currentGame.getResult()) { MusicPlayer.loseSound();
+        if (!currentGame.getResult()) MusicPlayer.loseSound();
 
-        }
         String iconPath = "resources/chip.png";
 
         // Create an ImageIcon with your custom icon

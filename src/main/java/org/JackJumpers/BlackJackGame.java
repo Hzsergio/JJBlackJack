@@ -1,5 +1,7 @@
 package org.JackJumpers;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ public class BlackJackGame {
         playerHand.playerHit(deck);
     }
 
-    public void dealerTurn() {
+    public void dealerTurn() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         while (dealerHand.calculateHandValue() < 17) {
             Card card = deck.drawCard();
             if (card != null) {
