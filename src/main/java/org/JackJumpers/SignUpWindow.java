@@ -3,7 +3,7 @@ package org.JackJumpers;
 import javax.swing.*;
 import java.awt.*;
 
-public class SignUpWindow {
+public class SignUpWindow extends CustomIcon{
     private final JFrame frame;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
@@ -14,6 +14,7 @@ public class SignUpWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(3, 2));
         frame.setLocationRelativeTo(null);
+        setCustomIcon(frame);
 
         usernameField = new JTextField();
         passwordField = new JPasswordField();

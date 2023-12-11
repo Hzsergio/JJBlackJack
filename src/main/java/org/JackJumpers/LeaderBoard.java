@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class LeaderBoard extends JFrame {
+public class LeaderBoard extends CustomIcon {
 
     public LeaderBoard() {
         setTitle("Leaderboard");

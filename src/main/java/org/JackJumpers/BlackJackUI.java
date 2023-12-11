@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 //test
-public class BlackJackUI extends JFrame implements CardListener {
+public class BlackJackUI extends CustomIcon implements CardListener {
     private JButton hitButton;
     private JButton standButton;
     private JButton restartButton;
@@ -18,16 +18,13 @@ public class BlackJackUI extends JFrame implements CardListener {
     private JButton doubleButton;
     private JLabel playerHandArea;
     private JLabel dealerHandArea;
-
     private JLabel pointInfo;
     private JPanel backgroundPanel;
-
     private final BlackJackGame currentGame;
     ImagePanel imagePanel1 = null;
     ImagePanel imagePanel2 = null;
     ImagePanel imagePanel3 = null;
     ImagePanel imagePanel4 = null;
-
     private int imageCounter = 4;
     private int imageCounterDealer = 4;
 
@@ -35,7 +32,7 @@ public class BlackJackUI extends JFrame implements CardListener {
     private final List<ImagePanel> dynamicImagePanelsDealer = new ArrayList<>();
     private final List<ImagePanel> dealImagePanels = new ArrayList<>();
     private Timer timer;
-    private int currentStep;//hi
+    private int currentStep;
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
         game.setCardListener(this);
@@ -150,6 +147,7 @@ public class BlackJackUI extends JFrame implements CardListener {
                 // Disable the buttons
                 hitButton.setEnabled(false);
                 standButton.setEnabled(false);
+                doubleButton.setEnabled(false);
                 SwingUtilities.invokeLater(this::revealDealerCards);
                 //Determine Winner
                 currentGame.determineWinner();
@@ -169,7 +167,6 @@ public class BlackJackUI extends JFrame implements CardListener {
         });
 
         doubleButton.addActionListener(e -> {
-//            createAndAddImagePanel();
             doubleDown();
             createAndAddImagePanel();
             hitButton.setEnabled(false);
@@ -214,6 +211,7 @@ public class BlackJackUI extends JFrame implements CardListener {
 //
             hitButton.setEnabled(false);
             standButton.setEnabled(false);
+            doubleButton.setEnabled(false);
 
             // Start the timer to introduce delays
             timer.start();
@@ -304,15 +302,10 @@ public class BlackJackUI extends JFrame implements CardListener {
         hitButton.setEnabled(true);
         standButton.setEnabled(true);
         showDoubleDown();
-        // Update the display
         resetHandLabels();
         currentStep = 0;
         revalidate();
         repaint();
-//        SwingUtilities.invokeLater(this::callBet);
-
-
-
     }
     private Image loadImageFromURL(String imageUrl) {
         try {
@@ -322,7 +315,6 @@ public class BlackJackUI extends JFrame implements CardListener {
             return null;
         }
     }
-
     @Override
     public void onCardDrawn(Card card) {
         System.out.println("Card drawn: " + card.getRank() + " of " + card.getSuit());
@@ -337,7 +329,6 @@ public class BlackJackUI extends JFrame implements CardListener {
         repaint();
 
     }
-
     private static class ImagePanel extends JPanel {
         private ImageIcon imageIcon;
 
@@ -383,11 +374,12 @@ public class BlackJackUI extends JFrame implements CardListener {
     }
     private void gameEndDisplay(){
         String message = BlackJackGame.getGameEndMessage();
+        String iconPath = "resources/chip.png";
 
-        JOptionPane.showMessageDialog(null, message,
-                "Information", JOptionPane.INFORMATION_MESSAGE);
+        // Create an ImageIcon with your custom icon
+        ImageIcon icon = new ImageIcon(iconPath);
+        JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.PLAIN_MESSAGE, icon);
     }
-
     private void handleTimerTick() {
         // Perform actions based on the current step
         switch (currentStep) {
@@ -417,11 +409,9 @@ public class BlackJackUI extends JFrame implements CardListener {
         // Move to the next step
         currentStep++;
     }
-
     private void startMusic(){
         MusicPlayer.playMusic();
     }
-
     public void showDoubleDown() {
         if (currentGame.canDoubleDown()) {
             doubleButton.setVisible(true);
@@ -434,7 +424,6 @@ public class BlackJackUI extends JFrame implements CardListener {
         revalidate();
         repaint();
     }
-
     public void doubleDown(){
         currentGame.doubleBet();
         pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + currentGame.getPoints());

@@ -5,14 +5,13 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
-public class Menu {//pls
+public class Menu extends CustomIcon{
     private final JFrame frame;
 
     public Menu() {
         frame = new JFrame("Main Menu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Create a JPanel with a background image
+        setCustomIcon(frame);
         JPanel backgroundPanel = getjPanel();
 
         // Create buttons
@@ -88,7 +87,8 @@ public class Menu {//pls
         SwingUtilities.invokeLater(LeaderBoard::new);
     }
 
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Menu());
+        SwingUtilities.invokeLater(Menu::new);
     }
 }

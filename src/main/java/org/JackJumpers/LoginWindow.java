@@ -7,7 +7,7 @@ import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class LoginWindow {
+public class LoginWindow extends CustomIcon{
     private final JFrame frame;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
@@ -19,7 +19,7 @@ public class LoginWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new GridLayout(3, 2));
-
+        setCustomIcon(frame);
         JLabel usernameLabel = new JLabel("Username:");
         usernameField = new JTextField();
         JLabel passwordLabel = new JLabel("Password:");
