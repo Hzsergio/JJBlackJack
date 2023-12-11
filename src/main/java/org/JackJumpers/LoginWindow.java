@@ -14,6 +14,8 @@ public class LoginWindow extends CustomIcon{
     private final JTextField usernameField;
     private final JPasswordField passwordField;
 
+    private JButton loginButton;
+
     public LoginWindow(JFrame previousFrame) {
 
         frame = new JFrame("BlackJack Login");
@@ -27,7 +29,7 @@ public class LoginWindow extends CustomIcon{
         JLabel passwordLabel = new JLabel("Password:");
         passwordField = new JPasswordField();
 
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
 
 
         JButton backButton = new JButton("Back");
@@ -61,11 +63,8 @@ public class LoginWindow extends CustomIcon{
         } catch (SQLException ex) {
             ex.printStackTrace();
             // Handle database connection error
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        } catch (LineUnavailableException e) {
+        } catch (URISyntaxException | IOException | InterruptedException | UnsupportedAudioFileException |
+                 LineUnavailableException e) {
             throw new RuntimeException(e);
         }
     }
@@ -81,4 +80,28 @@ public class LoginWindow extends CustomIcon{
         ui.createUI();
         ui.setVisible(true);
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame previousFrame = new JFrame(); // You can customize the previous frame as needed
+            new LoginWindow(previousFrame);
+        });
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public JTextField getUsernameField() {
+        return usernameField;
+    }
+
+    public JPasswordField getPasswordField() {
+        return passwordField;
+    }
+
+    public JButton getLoginButton() {
+        return loginButton;
+    }
+
 }

@@ -14,8 +14,6 @@ public class BlackJackGame {
     private boolean result;
     private static UserData player;
     private static int currentBet;
-
-
     private static String gameEndMessage;
     private CardListener cardListener;
 
@@ -32,9 +30,6 @@ public class BlackJackGame {
         player = UserData.getUserData(username);
     }
 
-    public static String getGameEndMessage() {
-        return gameEndMessage;
-    }
 
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
@@ -183,6 +178,9 @@ public class BlackJackGame {
         player.placeBet(currentBet);
         currentBet *= 2;
 
+    }
+    public static String getGameEndMessage() {
+        return gameEndMessage;
     }
 
     public boolean getResult() {

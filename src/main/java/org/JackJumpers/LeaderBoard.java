@@ -22,7 +22,7 @@ public class LeaderBoard extends CustomIcon {
         // Retrieve player data from the database
         List<UserData> players = retrievePlayerData();
 
-        // Sort players based on points (you can choose another criterion)
+        // Sort players based on points
         Collections.sort(players, Comparator.comparingInt(UserData::getPoints).reversed());
 
         // Create a table to display the leaderboard

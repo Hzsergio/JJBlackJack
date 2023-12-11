@@ -51,7 +51,7 @@ public class Deck {
         }
     }
 
-    public void shuffle() {
+    public void shuffle() { //shuffle the deck
         int n = cards.size();
         for (int i = n - 1; i > 0; i--) {
             int j = (int) (Math.random() * (i + 1));
@@ -61,7 +61,7 @@ public class Deck {
         }
     }
 
-    public void addCardToDeck(Card card) {
+    public void addCardToDeck(Card card) {//return cards to the deck to avoid api call delay
         cards.add(card);
     }
 
@@ -75,4 +75,7 @@ public class Deck {
     }
 
 
+    public List<Card> getCards() {
+        return cards;
+    }
 }

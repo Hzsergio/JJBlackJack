@@ -133,12 +133,6 @@ public class Hand {
         addCard(card);
     }
 
-    public void displayHand() {
-        for (Card card : cards) {
-            System.out.println(card);
-        }
-    }
-
     public boolean containsAce() {
         for (Card card : cards) {
             if (card.getRank() == Rank.ACE) {

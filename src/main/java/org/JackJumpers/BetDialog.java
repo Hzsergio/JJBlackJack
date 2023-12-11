@@ -9,6 +9,10 @@ public class BetDialog extends JDialog {
     private int betAmount;
     private JTextField betTextField;
 
+    public JTextField getBetTextField() {
+        return betTextField;
+    }
+
     public BetDialog(JFrame parent, int totalPoints) {
         super(parent, "Place Your Bet:", true);
         setSize(350, 300);
@@ -71,7 +75,13 @@ public class BetDialog extends JDialog {
         return betAmount;
     }
 
-    private class BetButtonListener implements ActionListener {
+    public Container getButtonPanel() {
+        return createButtonPanel(100);
+    }
+
+
+
+    class BetButtonListener implements ActionListener {
         private int amount;
 
         public BetButtonListener(int amount) {

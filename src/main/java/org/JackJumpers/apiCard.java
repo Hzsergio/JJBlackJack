@@ -4,9 +4,6 @@ import java.util.List;
 
 public class apiCard {
     private List<CardInfo> cards;
-
-    // Getters and setters...
-
     public List<CardInfo> getCards() {
         return cards;
     }
@@ -16,7 +13,6 @@ public class apiCard {
         private String suit;
         private String image;
 
-        // Getters and setters...
 
         public String getValue() {
             return value;
