@@ -99,13 +99,14 @@ public class BlackJackGame {
         }
     }
 
-    public void reset() throws URISyntaxException, IOException, InterruptedException {
+    public void reset() throws IOException {
         resetDeck();
         deck.shuffle();
         playerHand = new Hand(new ArrayList<>());
         dealerHand = new Hand(new ArrayList<>());
         playerHand.deal(deck);
         dealerHand.deal(deck);
+        result = false;
     }
 
     public String getUsername() {
@@ -119,23 +120,6 @@ public class BlackJackGame {
         } else player.incrementLosses();
         player.updateStats();
     }
-
-    //    public static void startBet() {
-//        boolean validBet = false;
-//        while (!validBet) {
-//            String betAmountString = JOptionPane.showInputDialog(null, "Current Points: " + player.getPoints() + "\nHow much do you want to bet?:", "Enter Bet", JOptionPane.QUESTION_MESSAGE);
-//
-//            int betAmount = Integer.parseInt(betAmountString);
-//
-//            if (UserData.canBet(betAmount)) {
-//                currentBet = betAmount;
-//                player.placeBet(betAmount);
-//                validBet = true;
-//            }
-//
-//
-//        }
-//    }
     public static int getCurrentBet() {
         return currentBet;
     }

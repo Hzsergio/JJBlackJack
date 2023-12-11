@@ -7,10 +7,11 @@ import java.io.IOException;
 public class MusicPlayer {
 
     private static Clip clip;
+    private static Clip music;
 
     static boolean toggleMusic() {
         // If clip is running, stop it
-        if (clip == null || !clip.isRunning()) {
+        if (music == null || !music.isRunning()) {
             // If clip is null or not running, start playing
             playMusic();
             return true;
@@ -22,9 +23,9 @@ public class MusicPlayer {
         try {
             if (musicPath.exists()) {
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
-                clip = AudioSystem.getClip();
-                clip.open(audioInput);
-                clip.start();
+                music = AudioSystem.getClip();
+                music.open(audioInput);
+                music.start();
             } else {
                 System.out.println("Can't find the file");
             }
@@ -34,8 +35,8 @@ public class MusicPlayer {
     }
 
     private static void stopMusic() {
-        if (clip != null && clip.isRunning()) {
-            clip.stop();
+        if (music != null && music.isRunning()) {
+            music.stop();
         }
     }
 

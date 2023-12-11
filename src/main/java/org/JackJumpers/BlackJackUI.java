@@ -97,7 +97,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         restartButton = new JButton("Play Again");
         restartButton.setVisible(false);
         exitButton = new JButton("Exit");
-        musicButton = new JButton("Stop Music");
+        musicButton = new JButton("Music");
         doubleButton = new JButton("Double Down");
 
 
@@ -445,9 +445,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         // Move to the next step
         currentStep++;
     }
-    private void startMusic(){
-        MusicPlayer.playMusic();
-    }
+
     public void showDoubleDown() {
         if (currentGame.canDoubleDown()) {
             doubleButton.setVisible(true);
