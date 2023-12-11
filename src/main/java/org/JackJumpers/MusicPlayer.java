@@ -1,9 +1,9 @@
 package org.JackJumpers;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.io.File;
+import java.io.IOException;
+
 public class MusicPlayer {
 
     private static Clip clip;
@@ -39,4 +39,35 @@ public class MusicPlayer {
         }
     }
 
+    private static void playSound(File sound) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        if (sound.exists()) {
+            AudioInputStream audioInput = AudioSystem.getAudioInputStream(sound);
+            clip = AudioSystem.getClip();
+            clip.open(audioInput);
+            clip.start();
+        } else {
+            System.out.println("Can't find the file");
+        }
+    }
+
+    public static void betSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        File sound = new File("resources/poker-chip.wav");
+        playSound(sound);
+
+
+    }
+    public static void shuffleSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        File sound = new File("resources/shuffle-cards.wav");
+        playSound(sound);
+    }
+
+    public static void winSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        File sound = new File("resources/win.wav");
+        playSound(sound);
+    }
+
+    public static void loseSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        File sound = new File("resources/lose.wav");
+        playSound(sound);
+    }
 }

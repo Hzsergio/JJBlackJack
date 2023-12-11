@@ -84,11 +84,11 @@ public class BlackJackGame {
         } else if (calculateDealerHand() > 21) {
             result = true;
             winBet();
-            gameEndMessage = "You win, dealer busts!";
+            gameEndMessage = "You win, dealer busts! \n " + (currentBet * 2) + " Points";
         } else if (calculatePlayerHand() > calculateDealerHand()) {
             result = true;
             winBet();
-            gameEndMessage = "You win!";
+            gameEndMessage = "You win!  \n " + (currentBet * 2) + " Points";
         } else if (calculatePlayerHand() < calculateDealerHand()) {
             gameEndMessage = "Dealer Wins";
         } else if (calculatePlayerHand() == calculateDealerHand()) {
@@ -197,6 +197,10 @@ public class BlackJackGame {
         player.placeBet(currentBet);
         currentBet *= 2;
 
+    }
+
+    public boolean getResult() {
+        return result;
     }
 }
 

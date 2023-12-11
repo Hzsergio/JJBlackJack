@@ -1,5 +1,7 @@
 package org.JackJumpers;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -61,6 +63,10 @@ public class LoginWindow extends CustomIcon{
             // Handle database connection error
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -69,7 +75,7 @@ public class LoginWindow extends CustomIcon{
         previousFrame.setVisible(true); // Show the previous frame (menu)
     }
 
-    public void startGame(String username) throws URISyntaxException, IOException, InterruptedException {
+    public void startGame(String username) throws URISyntaxException, IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
         BlackJackGame game = new BlackJackGame(username);
         BlackJackUI ui = new BlackJackUI(game);
         ui.createUI();

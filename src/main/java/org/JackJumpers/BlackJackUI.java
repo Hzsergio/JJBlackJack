@@ -1,5 +1,7 @@
 package org.JackJumpers;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -39,7 +41,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 //        MusicPlayer.playMusic();
 
     }
-    public void createUI() {
+    public void createUI() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         setTitle("Jack Jumpers Blackjack Playing as: " + currentGame.getUsername());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -122,7 +124,13 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         revalidate();
         repaint();
         // Initialize the timer
-        timer = new Timer(700, e -> handleTimerTick());
+        timer = new Timer(700, e -> {
+            try {
+                handleTimerTick();
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         currentStep = 0;
 
 
@@ -157,7 +165,13 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
                     // Now, schedule the bet window to open after a delay
                     // 1000 milliseconds (1 second) delay
-                    Timer timer = new Timer(800, e1 -> gameEndDisplay());
+                    Timer timer = new Timer(800, e1 -> {
+                        try {
+                            gameEndDisplay();
+                        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
                     timer.setRepeats(false); // Execute only once
                     timer.start();
                 });
@@ -180,7 +194,13 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
                             // Now, schedule the bet window to open after a delay
                             // 1000 milliseconds (1 second) delay
-                            Timer timer = new Timer(800, e1 -> gameEndDisplay());
+                            Timer timer = new Timer(800, e1 -> {
+                                try {
+                                    gameEndDisplay();
+                                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            });
                             timer.setRepeats(false); // Execute only once
                             timer.start();
                         });
@@ -194,7 +214,8 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         restartButton.addActionListener(e -> {
             try {
                 resetToDefault(); // Reset the page to the default state
-            } catch (URISyntaxException | InterruptedException | IOException ex) {
+            } catch (URISyntaxException | InterruptedException | IOException | LineUnavailableException |
+                     UnsupportedAudioFileException ex) {
                 throw new RuntimeException(ex);
             }
         });
@@ -235,7 +256,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         revalidate();
         repaint();
     }
-    private void initialDealImages() {
+    private void initialDealImages() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
 
         String backOfCard = "https://www.deckofcardsapi.com/static/img/back.png";
 
@@ -267,6 +288,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         backgroundPanel.add(imagePanel2);
         backgroundPanel.add(imagePanel3);
         backgroundPanel.add(imagePanel4);
+        MusicPlayer.shuffleSound();
 
     }
     public void revealDealerCards(){
@@ -280,7 +302,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         }
         updateHandLabels();
     }
-    private void resetToDefault() throws URISyntaxException, IOException, InterruptedException {
+    private void resetToDefault() throws URISyntaxException, IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
         for (ImagePanel dynamicImagePanel : dynamicImagePanels) {
             remove(dynamicImagePanel);
         }
@@ -368,19 +390,25 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateDealerHand() + " Dealer");
     }
-    private void callBet(){
+    private void callBet() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         BlackJackGame.startBet();
+        MusicPlayer.betSound();
+
 
     }
-    private void gameEndDisplay(){
+    private void gameEndDisplay() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         String message = BlackJackGame.getGameEndMessage();
+        if(currentGame.getResult()) MusicPlayer.winSound();
+        else if (!currentGame.getResult()) { MusicPlayer.loseSound();
+
+        }
         String iconPath = "resources/chip.png";
 
         // Create an ImageIcon with your custom icon
         ImageIcon icon = new ImageIcon(iconPath);
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.PLAIN_MESSAGE, icon);
     }
-    private void handleTimerTick() {
+    private void handleTimerTick() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         // Perform actions based on the current step
         switch (currentStep) {
             case 0:
