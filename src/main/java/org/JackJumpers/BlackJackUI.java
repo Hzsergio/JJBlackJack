@@ -102,9 +102,8 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
         dealerHandArea.setForeground(Color.WHITE);
         pointInfo.setForeground(Color.YELLOW);
-
-        // Change font color for label2 (example: blue)
         playerHandArea.setForeground(Color.YELLOW);
+
         // Create buttons
         hitButton = new JButton("Hit");
         standButton = new JButton("Stand");
@@ -153,14 +152,18 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
 
         exitButton.addActionListener(e -> {
+            String iconPath = "resources/chip.png";
+
+            ImageIcon icon = new ImageIcon(iconPath);
+
             // Display a confirmation dialog before exiting
             int choice = JOptionPane.showConfirmDialog(null,
                     "Are you sure you want to exit? \n (Placed bets will not be returned)",
                     "Exit Confirmation",
-                    JOptionPane.YES_NO_OPTION);
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
             if (choice == JOptionPane.YES_OPTION) {
                 // Perform the exit action
-                System.out.println("Exiting the game..."); // Replace with your exit logic
+                System.out.println("Exiting the game...");
                 System.exit(0);
             }
         });
@@ -181,10 +184,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
                 currentGame.determineWinner();
                 currentGame.updateWinLoss();
                 SwingUtilities.invokeLater(() -> {
-                    // Additional UI-related setup code if needed
 
-                    // Now, schedule the bet window to open after a delay
-                    // 1000 milliseconds (1 second) delay
                     Timer timer = new Timer(800, e1 -> {
                         try {
                             gameEndDisplay();
@@ -216,8 +216,8 @@ public class BlackJackUI extends CustomIcon implements CardListener {
                 currentGame.updateWinLoss();
                 SwingUtilities.invokeLater(() -> {
 
-                            // Now, schedule the bet window to open after a delay
-                            // 1000 milliseconds (1 second) delay
+                            //bet window to open after a delay
+
                             Timer timer = new Timer(800, e1 -> {
                                 try {
                                     gameEndDisplay();
@@ -308,7 +308,6 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
         imagePanel1 = new ImagePanel(backOfCard);
 
-//        imagePanel1 = new ImagePanel(dealersCurrentCards.get(0));
         imagePanel2 = new ImagePanel(dealersCurrentCards.get(1));
         dealImagePanels.add(imagePanel1);
         dealImagePanels.add(imagePanel2);
@@ -508,8 +507,6 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         if (!currentGame.getResult()) MusicPlayer.loseSound();
 
         String iconPath = "resources/chip.png";
-
-        // Create an ImageIcon with your custom icon
         ImageIcon icon = new ImageIcon(iconPath);
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.PLAIN_MESSAGE, icon);
     }

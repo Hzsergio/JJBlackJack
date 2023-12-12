@@ -184,7 +184,7 @@ public class BlackJackGame {
         boolean validBet = false;
         while (!validBet) {
             // Call BetDialog to get the bet amount
-            int betAmount = BetDialog.getBetAmount(null, player.getPoints()); // You can pass null or create a JFrame if needed
+            int betAmount = BetDialog.getBetAmount(null, player.getPoints());
 
             if (player.canBet(betAmount)) {
                 currentBet = betAmount;
