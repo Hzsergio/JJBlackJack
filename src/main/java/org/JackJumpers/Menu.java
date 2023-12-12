@@ -1,18 +1,26 @@
 package org.JackJumpers;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
-public class Menu extends CustomIcon{
+/**
+ * The main menu class for the BlackJack game.
+ */
+public class Menu extends CustomIcon {
+
     private final JFrame frame;
 
+    /**
+     * Constructs the main menu.
+     */
     public Menu() {
         frame = new JFrame("Main Menu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setCustomIcon(frame);
-        JPanel backgroundPanel = getjPanel();
+        JPanel backgroundPanel = getBackgroundPanel();
 
         // Create buttons
         JButton loginButton = new JButton("Play");
@@ -42,7 +50,12 @@ public class Menu extends CustomIcon{
         createAccountButton.addActionListener(e -> openSignupWindow());
     }
 
-    private JPanel getjPanel() {
+    /**
+     * Creates a background panel with a custom-painted image.
+     *
+     * @return The background panel.
+     */
+    private JPanel getBackgroundPanel() {
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -63,6 +76,9 @@ public class Menu extends CustomIcon{
         return backgroundPanel;
     }
 
+    /**
+     * Opens the login window.
+     */
     private void openLoginWindow() {
         frame.dispose(); // Close the main menu window
 
@@ -72,6 +88,9 @@ public class Menu extends CustomIcon{
         });
     }
 
+    /**
+     * Opens the signup window.
+     */
     private void openSignupWindow() {
         frame.dispose(); // Close the main menu window
 
@@ -81,13 +100,19 @@ public class Menu extends CustomIcon{
         });
     }
 
+    /**
+     * Opens the leaderboard window.
+     */
     private void openLeaderboard() {
-        // Implement the logic to display the leaderboard
         // Instantiate the BlackjackLeaderboard class
         SwingUtilities.invokeLater(LeaderBoard::new);
     }
 
-
+    /**
+     * The entry point for the BlackJack game.
+     *
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Menu::new);
     }

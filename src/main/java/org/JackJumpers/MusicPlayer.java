@@ -4,21 +4,33 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The MusicPlayer class manages the background music and various sound effects for the game.
+ */
 public class MusicPlayer {
 
-    private static Clip clip;
     private static Clip music;
 
+    /**
+     * Toggles the background music between play and pause.
+     *
+     * @return True if music is now playing, false if paused.
+     */
     static boolean toggleMusic() {
-        // If clip is running, stop it
+        // If music clip is running, stop it; otherwise, start playing
         if (music == null || !music.isRunning()) {
-            // If clip is null or not running, start playing
             playMusic();
             return true;
-        } else stopMusic();
-        return false;
+        } else {
+            stopMusic();
+            return false;
+        }
     }
-     static void playMusic() {
+
+    /**
+     * Plays the background music.
+     */
+    static void playMusic() {
         File musicPath = new File("resources/casinomusic.wav");
         try {
             if (musicPath.exists()) {
@@ -34,16 +46,27 @@ public class MusicPlayer {
         }
     }
 
+    /**
+     * Stops the background music.
+     */
     private static void stopMusic() {
         if (music != null && music.isRunning()) {
             music.stop();
         }
     }
 
+    /**
+     * Plays a specified sound effect.
+     *
+     * @param sound The sound effect file to be played.
+     * @throws UnsupportedAudioFileException If the audio file format is not supported.
+     * @throws IOException                   If an I/O error occurs.
+     * @throws LineUnavailableException      If a line matching the requested parameters cannot be opened.
+     */
     private static void playSound(File sound) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (sound.exists()) {
             AudioInputStream audioInput = AudioSystem.getAudioInputStream(sound);
-            clip = AudioSystem.getClip();
+            Clip clip = AudioSystem.getClip();
             clip.open(audioInput);
             clip.start();
         } else {
@@ -51,26 +74,41 @@ public class MusicPlayer {
         }
     }
 
+    /**
+     * Plays the sound effect for betting.
+     */
     public static void betSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         File sound = new File("resources/poker-chip.wav");
         playSound(sound);
-
-
     }
+
+    /**
+     * Plays the sound effect for shuffling cards.
+     */
     public static void shuffleSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         File sound = new File("resources/shuffle-cards.wav");
         playSound(sound);
     }
 
+    /**
+     * Plays the sound effect for winning.
+     */
     public static void winSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         File sound = new File("resources/win.wav");
         playSound(sound);
     }
 
+    /**
+     * Plays the sound effect for losing.
+     */
     public static void loseSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         File sound = new File("resources/lose.wav");
         playSound(sound);
     }
+
+    /**
+     * Plays the sound effect for drawing a card.
+     */
     public static void cardSound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         File sound = new File("resources/taking-card.wav");
         playSound(sound);

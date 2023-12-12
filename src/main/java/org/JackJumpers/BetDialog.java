@@ -5,14 +5,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Dialog for placing bets in a Blackjack game.
+ */
+
 public class BetDialog extends JDialog {
     private int betAmount;
-    private JTextField betTextField;
+    private final JTextField betTextField;
 
-    public JTextField getBetTextField() {
-        return betTextField;
-    }
-
+    /**
+     * Constructs a BetDialog.
+     *
+     * @param parent       The parent frame.
+     * @param totalPoints  The total points available for betting.
+     */
     public BetDialog(JFrame parent, int totalPoints) {
         super(parent, "Place Your Bet:", true);
         setSize(350, 300);
@@ -79,10 +85,8 @@ public class BetDialog extends JDialog {
         return createButtonPanel(100);
     }
 
-
-
     class BetButtonListener implements ActionListener {
-        private int amount;
+        private final int amount;
 
         public BetButtonListener(int amount) {
             this.amount = amount;
@@ -115,6 +119,9 @@ public class BetDialog extends JDialog {
         betDialog.setVisible(true);
         return betDialog.getBetAmount();
     }
+    public JTextField getBetTextField() {
+        return betTextField;
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -131,6 +138,7 @@ public class BetDialog extends JDialog {
             System.exit(0);
         });
     }
+
 }
 
 

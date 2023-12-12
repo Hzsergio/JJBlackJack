@@ -1,9 +1,23 @@
 package org.JackJumpers;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
+/**
+ * The UserRegistration class provides methods for user registration and username validation.
+ */
 public class UserRegistration {
-    //demo
+
+    /**
+     * Registers a new user by adding their username and password to the database.
+     *
+     * @param username The username of the new user.
+     * @param password The password of the new user.
+     * @return True if the registration is successful; false otherwise.
+     */
     public static boolean addUser(String username, String password) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             // Check if the username is already taken
@@ -35,11 +49,17 @@ public class UserRegistration {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to add user: " + username);
             return false;
         }
     }
 
+    /**
+     * Checks if a username is already taken by querying the database.
+     *
+     * @param username The username to be checked.
+     * @return True if the username is already taken; false otherwise.
+     */
     private static boolean isUsernameTaken(String username) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String checkQuery = "SELECT COUNT(*) AS count FROM users WHERE username = ?";
@@ -53,7 +73,7 @@ public class UserRegistration {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error checking username: " + username);
         }
         return false;
     }

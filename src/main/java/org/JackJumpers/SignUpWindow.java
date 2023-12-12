@@ -3,11 +3,20 @@ package org.JackJumpers;
 import javax.swing.*;
 import java.awt.*;
 
-public class SignUpWindow extends CustomIcon{
+/**
+ * The SignUpWindow class represents the window for user signup.
+ */
+public class SignUpWindow extends CustomIcon {
+
     private final JFrame frame;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
 
+    /**
+     * Constructs a SignUpWindow object.
+     *
+     * @param previousFrame The frame of the previous window.
+     */
     public SignUpWindow(JFrame previousFrame) {
         frame = new JFrame("Signup");
         frame.setSize(300, 150);
@@ -31,12 +40,15 @@ public class SignUpWindow extends CustomIcon{
         frame.add(backButton);
 
         frame.setVisible(true);
+
         backButton.addActionListener(e -> goBack(previousFrame));
         signupButton.addActionListener(e -> performSignup());
-
-
     }
 
+    /**
+     * Performs user signup by retrieving input values, attempting registration,
+     * and displaying appropriate messages.
+     */
     private void performSignup() {
         String username = usernameField.getText();
         char[] passwordChars = passwordField.getPassword();
@@ -53,10 +65,18 @@ public class SignUpWindow extends CustomIcon{
         }
     }
 
+    /**
+     * Opens the main menu window.
+     */
     private void openMainMenu() {
-        // Open the main menu window
         SwingUtilities.invokeLater(Menu::new);
     }
+
+    /**
+     * Closes the current window and shows the previous frame (menu).
+     *
+     * @param previousFrame The frame of the previous window.
+     */
     private void goBack(JFrame previousFrame) {
         frame.dispose(); // Close the current window
         previousFrame.setVisible(true); // Show the previous frame (menu)

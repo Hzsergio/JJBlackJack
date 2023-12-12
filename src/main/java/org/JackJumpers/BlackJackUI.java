@@ -10,12 +10,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-//test
+/**
+ * The BlackJackUI class represents the graphical user interface for the Blackjack game.
+ * It extends the CustomIcon class and implements the CardListener interface.
+ */
 public class BlackJackUI extends CustomIcon implements CardListener {
     private JButton hitButton;
     private JButton standButton;
     private JButton restartButton;
-    private JButton exitButton;
     private JButton musicButton;
     private JButton doubleButton;
     private JLabel playerHandArea;
@@ -35,12 +37,24 @@ public class BlackJackUI extends CustomIcon implements CardListener {
     private final List<ImagePanel> dealImagePanels = new ArrayList<>();
     private Timer timer;
     private int currentStep;
+
+    /**
+     * Constructs a BlackJackUI object.
+     *
+     * @param game The associated BlackJackGame object.
+     */
     public BlackJackUI(BlackJackGame game) {
         this.currentGame = game;
         game.setCardListener(this);
-//        MusicPlayer.playMusic();
-
     }
+
+    /**
+     * Creates and initializes the user interface for the Blackjack game.
+     *
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     * @throws IOException                   If an IO operation fails.
+     */
     public void createUI() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         setTitle("Jack Jumpers Blackjack Playing as: " + currentGame.getUsername());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,9 +110,10 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         standButton = new JButton("Stand");
         restartButton = new JButton("Play Again");
         restartButton.setVisible(false);
-        exitButton = new JButton("Exit");
+        JButton exitButton = new JButton("Exit");
         musicButton = new JButton("Music");
         doubleButton = new JButton("Double Down");
+        JButton leaderboardsButton = new JButton("Leaderboards");
 
 
         // Set bounds for buttons
@@ -108,6 +123,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         exitButton.setBounds(600, 450, 75, 30);
         musicButton.setBounds(600, 5, 100, 30);
         doubleButton.setBounds(180, 450, 125, 30);
+        leaderboardsButton.setBounds(450, 5, 125, 30);
 
 
         // Add components to the background panel
@@ -121,10 +137,11 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         backgroundPanel.add(exitButton);
         backgroundPanel.add(musicButton);
         backgroundPanel.add(doubleButton);
+        backgroundPanel.add(leaderboardsButton);
         revalidate();
         repaint();
         // Initialize the timer
-        timer = new Timer(700, e -> {
+        timer = new Timer(500, e -> {
             try {
                 handleTimerTick();
             } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
@@ -147,7 +164,6 @@ public class BlackJackUI extends CustomIcon implements CardListener {
                 System.exit(0);
             }
         });
-        // Add ActionListener to button1
         hitButton.addActionListener(e -> {
             doubleButton.setVisible(false);
             try {
@@ -218,7 +234,6 @@ public class BlackJackUI extends CustomIcon implements CardListener {
 
         });
 
-        // Add ActionListener to button2
         restartButton.addActionListener(e -> {
             try {
                 resetToDefault(); // Reset the page to the default state
@@ -229,15 +244,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         });
 
         standButton.addActionListener(e -> {
-//            hitButton.setEnabled(false);
-//            standButton.setEnabled(false);
-//            revealDealerCards();
-//            currentGame.dealerTurn();
-//            updateHandLabels();
-//            currentGame.determineWinner();
-//            gameEndDisplay();
-//            restartButton.setVisible(true);
-//
+
             hitButton.setEnabled(false);
             standButton.setEnabled(false);
             doubleButton.setEnabled(false);
@@ -250,9 +257,20 @@ public class BlackJackUI extends CustomIcon implements CardListener {
             if(musicStatus) musicButton.setText("Stop Music");
             else musicButton.setText("Play Music");
         });
+        leaderboardsButton.addActionListener(e -> SwingUtilities.invokeLater(LeaderBoard::new));
+
+
 
 
     }//end of createUI
+
+    /**
+     * Creates and adds an ImagePanel to represent a drawn card in the UI.
+     *
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     * @throws IOException                   If an IO operation fails.
+     */
     private void createAndAddImagePanel() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         currentGame.Hit();
         updatePlayerHandLabel();
@@ -265,6 +283,14 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         repaint();
         MusicPlayer.cardSound();
     }
+
+    /**
+     * Initializes the UI with the initial deal of cards, including hidden dealer card.
+     *
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     * @throws IOException                   If an IO operation fails.
+     */
     private void initialDealImages() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
 
         String backOfCard = "https://www.deckofcardsapi.com/static/img/back.png";
@@ -300,6 +326,10 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         MusicPlayer.shuffleSound();
 
     }
+
+    /**
+     * Reveals the dealer's hidden cards in the UI.
+     */
     public void revealDealerCards(){
         List<String> dealersCurrentCards = currentGame.getDealerImages();
 
@@ -311,6 +341,16 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         }
         updateHandLabels();
     }
+
+    /**
+     * Resets the UI to its default state after a game is finished.
+     *
+     * @throws URISyntaxException          If a URI syntax exception occurs.
+     * @throws IOException                If an IO operation fails.
+     * @throws InterruptedException       If a thread is interrupted.
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     */
     private void resetToDefault() throws URISyntaxException, IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
         for (ImagePanel dynamicImagePanel : dynamicImagePanels) {
             remove(dynamicImagePanel);
@@ -338,18 +378,32 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         revalidate();
         repaint();
     }
+
+    /**
+     * Loads an image from a given URL.
+     *
+     * @param imageUrl The URL of the image.
+     * @return The loaded image.
+     */
     private Image loadImageFromURL(String imageUrl) {
         try {
             return new ImageIcon(new URL(imageUrl)).getImage();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to load image");
             return null;
         }
     }
+
+    /**
+     * Handles the event of a card being drawn and updates the UI accordingly.
+     *
+     * @param card The drawn card.
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     * @throws IOException                   If an IO operation fails.
+     */
     @Override
     public void onCardDrawn(Card card) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        System.out.println("Card drawn: " + card.getRank() + " of " + card.getSuit());
-
         updateHandLabels();
         ImagePanel newImagePanel = new ImagePanel(card.getUrl());
         newImagePanel.setBounds(100 + (imageCounterDealer - 2) * 130, 50, 114, 158);
@@ -360,13 +414,27 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         repaint();
         MusicPlayer.cardSound();
     }
+
+    /**
+     * A JPanel subclass representing an image panel for displaying card images.
+     */
     private static class ImagePanel extends JPanel {
         private ImageIcon imageIcon;
 
+        /**
+         * Constructs an ImagePanel with the given image URL.
+         *
+         * @param imageUrl The URL of the image.
+         */
         public ImagePanel(String imageUrl) {
             setImage(imageUrl);
         }
 
+        /**
+         * Sets the image of the panel based on the given URL.
+         *
+         * @param imageUrl The URL of the image.
+         */
         public void setImage(String imageUrl) {
             try {
                 Image originalImage = new ImageIcon(new URL(imageUrl)).getImage();
@@ -375,7 +443,7 @@ public class BlackJackUI extends CustomIcon implements CardListener {
                 imageIcon = new ImageIcon(originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT));
                 repaint(); // Repaint the panel to update the displayed image
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                System.err.println("Failed to set image");
             }
         }
 
@@ -387,24 +455,53 @@ public class BlackJackUI extends CustomIcon implements CardListener {
             }
         }
     }
+
+    /**
+     * Resets the labels displaying the player's and dealer's hand information.
+     */
     private void resetHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateHiddenHand() + " Dealer");
         pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + (currentGame.getPoints() + BlackJackGame.getCurrentBet()));
     }
+
+    /**
+     * Updates the label displaying the player's hand information.
+     */
     private void updatePlayerHandLabel() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
     }
+
+
+    /**
+     * Updates the labels displaying the player's and dealer's hand information.
+     */
     private void updateHandLabels() {
         playerHandArea.setText(currentGame.calculatePlayerHand() + " Player");
         dealerHandArea.setText(currentGame.calculateDealerHand() + " Dealer");
     }
+
+    /**
+     * Calls the bet function to start a new bet in the game.
+     *
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     * @throws IOException                   If an IO operation fails.
+     */
     private void callBet() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         BlackJackGame.startBet();
         MusicPlayer.betSound();
 
 
     }
+
+    /**
+     * Displays the end-of-game message with appropriate sound effects.
+     *
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     * @throws IOException                   If an IO operation fails.
+     */
     private void gameEndDisplay() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         String message = BlackJackGame.getGameEndMessage();
         if(currentGame.getResult()) MusicPlayer.winSound();
@@ -416,6 +513,14 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         ImageIcon icon = new ImageIcon(iconPath);
         JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.PLAIN_MESSAGE, icon);
     }
+
+    /**
+     * Handles the timer tick event, performing actions based on the current step.
+     *
+     * @throws UnsupportedAudioFileException If an unsupported audio file is encountered.
+     * @throws LineUnavailableException      If a line is unavailable for audio playback.
+     * @throws IOException                   If an IO operation fails.
+     */
     private void handleTimerTick() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         // Perform actions based on the current step
         switch (currentStep) {
@@ -446,6 +551,9 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         currentStep++;
     }
 
+    /**
+     * Shows or hides the "Double Down" button based on the game state.
+     */
     public void showDoubleDown() {
         if (currentGame.canDoubleDown()) {
             doubleButton.setVisible(true);
@@ -458,6 +566,10 @@ public class BlackJackUI extends CustomIcon implements CardListener {
         revalidate();
         repaint();
     }
+
+    /**
+     * Handles the "Double Down" action in the game.
+     */
     public void doubleDown(){
         currentGame.doubleBet();
         pointInfo.setText("Current Bet: " + BlackJackGame.getCurrentBet() + "     Points: " + currentGame.getPoints());

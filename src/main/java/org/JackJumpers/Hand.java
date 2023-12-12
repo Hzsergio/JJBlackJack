@@ -2,19 +2,34 @@ package org.JackJumpers;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Represents a player's or dealer's hand in a blackjack game.
+ */
 public class Hand {
 
     private final List<Card> cards;
-
+    /**
+     * Constructs a hand with the given list of cards.
+     *
+     * @param cards The initial list of cards in the hand.
+     */
     public Hand(List<Card> cards) {
         this.cards = cards;
     }
 
+    /**
+     * Adds a card to the hand.
+     *
+     * @param card The card to be added to the hand.
+     */
     public void addCard(Card card) {
         cards.add(card);
     }
-
+    /**
+     * Calculates the total value of the hand.
+     *
+     * @return The total value of the hand.
+     */
     public int calculateHandValue() {
         int handValue = 0;
         int numAces = 0;
@@ -66,6 +81,12 @@ public class Hand {
 
         return handValue;
     }
+
+    /**
+     * Calculates the hidden value of the dealer's hand.
+     *
+     * @return The hidden value of the dealer's hand.
+     */
     public int calculateHiddenHandValue() {
         if (cards.size() < 2) {
             return 0;
@@ -115,6 +136,11 @@ public class Hand {
         return handValue;
     }
 
+    /**
+     * Deals two cards from the deck to the hand.
+     *
+     * @param deck The deck from which cards are drawn.
+     */
     public void deal(Deck deck) {
         for (int i = 0; i < 2; i++) {
             Card card = deck.drawCard();
@@ -126,13 +152,21 @@ public class Hand {
             }
         }
     }
-
+    /**
+     * Allows the player to hit, adding a card to the hand.
+     *
+     * @param deck The deck from which a card is drawn.
+     */
     public void playerHit(Deck deck) {
         Card card = deck.drawCard();
 //        System.out.println(card.getUrl());
         addCard(card);
     }
-
+    /**
+     * Checks if the hand contains an Ace.
+     *
+     * @return true if the hand contains an Ace, false otherwise.
+     */
     public boolean containsAce() {
         for (Card card : cards) {
             if (card.getRank() == Rank.ACE) {
@@ -141,7 +175,11 @@ public class Hand {
         }
         return false;
     }
-
+    /**
+     * Gets the URLs of the card images in the hand.
+     *
+     * @return The list of card images URLs.
+     */
     public List<String> getCardImages() {
         List<String> cardImages = new ArrayList<>();
         for (Card card : cards) {
@@ -150,13 +188,22 @@ public class Hand {
         return cardImages;
     }
 
+    /**
+     * Returns the cards in the hand to the deck.
+     *
+     * @param deck The deck to which cards are returned.
+     */
     public void returnToDeck(Deck deck) {
         for (Card card : cards) {
             deck.addCardToDeck(card);
 
         }
     }
-
+    /**
+     * Gets the URL of the latest card image in the hand.
+     *
+     * @return The URL of the latest card image, or null if the hand is empty.
+     */
     public String getLatestCardImage() {
         if (!cards.isEmpty()) {
             return cards.get(cards.size() - 1).getUrl();
@@ -164,7 +211,11 @@ public class Hand {
             return null;  // Handle the case when the hand is empty
         }
     }
-
+    /**
+     * Converts the hand to a string representation.
+     *
+     * @return The string representation of the hand.
+     */
     @Override
     public String toString() {
         StringBuilder handString = new StringBuilder();
